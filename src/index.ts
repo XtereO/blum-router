@@ -4,6 +4,8 @@ import {
   setActivePanel,
   setActivePopout,
   setActiveView,
+  _setActiveModal,
+  _setActivePopout,
 } from "./router";
 import {
   createDisableBackBrowserRouteMiddleware,
@@ -22,4 +24,6 @@ export {
   setActivePanel,
   setActivePopout,
   back,
+  _setActiveModal,
+  _setActivePopout,
 };

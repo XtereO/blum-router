@@ -1,11 +1,13 @@
 import { createStore } from "effector";
 import {
+  initRoute,
   setActiveModal,
   setActivePanel,
   setActivePopout,
   setActiveView,
+  setRoutes,
   _setActiveModal,
-  _setActivePopout,
+  _setActivePopout
 } from "./event";
 
 type Store = {
@@ -13,6 +15,7 @@ type Store = {
   activePanel: string | null;
   activeModal: string | null;
   activePopout: string | null;
+  isRouteInit: boolean;
 };
 
 export const $router = createStore<Store>({
@@ -20,6 +23,7 @@ export const $router = createStore<Store>({
   activePanel: null,
   activeModal: null,
   activePopout: null,
+  isRouteInit: false,
 })
   .on(setActiveView, (state, activeView) => ({
     ...state,
@@ -44,4 +48,16 @@ export const $router = createStore<Store>({
   .on(_setActivePopout, (state, activePopout) => ({
     ...state,
     activePopout,
+  }))
+  .on(initRoute, (state) => ({
+    ...state,
+    isRouteInit: true,
+  }))
+  //@ts-ignore
+  .on(setRoutes, (state, routes) => ({
+    ...state,
+    activeView: routes.hasOwnProperty("view") ? routes.view : state.activeView,
+    activePanel: routes.hasOwnProperty("panel") ? routes.panel : state.activePanel,
+    activeModal: routes.hasOwnProperty("modal") ? routes.modal : state.activeModal,
+    activePopout: routes.hasOwnProperty("popout") ? routes.popout : state.activePopout,
   }));

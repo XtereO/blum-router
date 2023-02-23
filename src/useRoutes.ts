@@ -2,30 +2,37 @@ import { useStore } from "effector-react";
 import { useEffect } from "react";
 import {
   $router,
+  historyPush,
+  initRoute,
   setActiveModal,
   setActivePanel,
   setActivePopout,
   setActiveView,
   _setActiveModal,
-  _setActivePopout,
+  _setActivePopout
 } from "./router";
+import { InitRouteOptions, RouteMiddleware, Routes } from "./types";
 import { useEventListener } from "./useEventListener";
 
 export const useInitRouter = (
   options: InitRouteOptions,
   ...middlewares: RouteMiddleware[]
 ) => {
-  const { activeView, activePanel, activeModal, activePopout } = useRouter();
+  const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
+    useRouter();
   useEffect(() => {
-    setActiveView(options.view);
-    setActivePanel(options.panel);
-    if (options.modal) {
-      setActiveModal(options.modal);
+    if (!isRouteInit) {
+      setActiveView(options.view);
+      setActivePanel(options.panel);
+      if (options.modal) {
+        setActiveModal(options.modal);
+      }
+      if (options.popout) {
+        setActivePopout(options.popout);
+      }
+      initRoute();
     }
-    if (options.popout) {
-      setActivePopout(options.popout);
-    }
-  }, [options.view, options.panel, options.modal, options.popout]);
+  }, [isRouteInit, options.view, options.panel, options.modal, options.popout]);
   useEffect(() => {
     const state = window.history.state ?? {
       view: undefined,
@@ -34,22 +41,20 @@ export const useInitRouter = (
       popout: undefined,
     };
     if (
-      state.view !== activeView ||
-      state.panel !== activePanel ||
-      state.modal !== activeModal ||
-      state.popout !== activePopout
+      isRouteInit &&
+      (state.view !== activeView ||
+        state.panel !== activePanel ||
+        state.modal !== activeModal ||
+        state.popout !== activePopout)
     ) {
-      window.history.pushState(
-        {
-          view: activeView,
-          panel: activePanel,
-          modal: activeModal,
-          popout: activePopout,
-        },
-        ""
-      );
+      historyPush({
+        view: activeView,
+        panel: activePanel,
+        modal: activeModal,
+        popout: activePopout,
+      });
     }
-  }, [activeView, activePanel, activeModal, activePopout]);
+  }, [activeView, activePanel, activeModal, activePopout, isRouteInit]);
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
@@ -87,8 +92,10 @@ export const useInitRouter = (
       _setActiveModal(modal);
       _setActivePopout(popout);
     };
-    await changeRoutes();
-    window.isBackFromBrowser = true;
+    if (isRouteInit) {
+      await changeRoutes();
+      window.isBackFromBrowser = true;
+    }
   });
 };
 
@@ -110,28 +117,9 @@ export const createDisableBackBrowserRouteMiddleware = (
       if (callback) {
         callback(storeRoutes, prevRoutes);
       }
-      window.history.pushState(storeRoutes, "");
+      historyPush(storeRoutes);
       return false;
     }
     return true;
   };
 };
-
-type InitRouteOptions = {
-  view: string;
-  panel: string;
-  modal?: string | null;
-  popout?: string | null;
-};
-
-type Routes = {
-  view: string | null;
-  panel: string | null;
-  modal: string | null;
-  popout: string | null;
-};
-
-type RouteMiddleware = (
-  storeRoutes: Routes,
-  prevRoutes: Routes
-) => boolean | Promise<boolean>;

@@ -12,7 +12,7 @@ This library based on [effector](https://www.npmjs.com/package/effector) and win
 
 To Route handle prev button in browser, you should init first:
 
-`import { useInitRouter } from '@blumjs/router';
+```import { useInitRouter } from '@blumjs/router';
 
 const App = () => {
   useInitRouter({
@@ -24,11 +24,11 @@ const App = () => {
   
   ...
 }
-`
+```
 
 To handle prev button you can use middlewares:
 
-`import { useInitRouter, createDisableBackBrowserRouteMiddleware, createRouteMiddleware, historyPush } from '@blumjs/router';
+```import { useInitRouter, createDisableBackBrowserRouteMiddleware, createRouteMiddleware, historyPush } from '@blumjs/router';
 
 const App = () => {
   useInitRouter({
@@ -51,26 +51,26 @@ const App = () => {
   
   ...
 }
-`
+```
 
 ### Routes: get
 
 To get routes and check initialization routes:
 
-`import { useRouter } from '@blumjs/router';
+```import { useRouter } from '@blumjs/router';
 
 const App = () => {
   const { activeView, activePanel, activeModal, activePopout, isRouteInit } = useRouter();
 
   ...
 }
-`
+```
 
 ### Routes: set
 
 To set routes you can use functions: setRoutes(set all routes), setActiveView, setActivePanel, setActiveModal, setActivePopout.
 
-`import { setRoutes, setActiveView, setActivePanel, setActiveModal, setActivePopout } from '@blumjs/router';
+```import { setRoutes, setActiveView, setActivePanel, setActiveModal, setActivePopout } from '@blumjs/router';
 
 //setRoutes accept partial routes
 setRoutes({view: 'Main', panel: 'Home'});
@@ -81,20 +81,20 @@ setActiveView('Main');
 setActivePanel('Home');
 setActiveModal('Notifications');
 setActivePopout('Loading');
-`
+```
 
 To get previous page use back:
 
-`import { back } from '@blumjs/router';
+```import { back } from '@blumjs/router';
 
 back();
-`
+```
 
 If you need turn off modal and popout in new page (for example, offline page, where user shouldn't see modal and popout) you can use _setActiveModal, _setActivePopout. In other case use back.
 
-`import { _setActiveModal, _setActivePopout } from '@blumjs/router';
+```import { _setActiveModal, _setActivePopout } from '@blumjs/router';
 
 _setActiveModal(null);
 _setActivePopout(null);
-`
+```
 

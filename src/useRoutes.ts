@@ -68,10 +68,10 @@ export const useInitRouter = (
       _setActiveModal(virtualModal);
       _setActivePopout(virtualPopout);
       historyPush({
-        view: activeView,
-        panel: activePanel,
-        modal: activeModal,
-        popout: activePopout,
+        view: virtualView,
+        panel: virtualPanel,
+        modal: virtualModal,
+        popout: virtualPopout,
       });
     }
   }, [

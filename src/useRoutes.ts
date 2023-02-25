@@ -42,7 +42,6 @@ export const useInitRouter = (
       if (options.popout) {
         setActivePopout(options.popout);
       }
-      initRoute();
     }
   }, [isRouteInit, options.view, options.panel, options.modal, options.popout]);
 
@@ -56,12 +55,13 @@ export const useInitRouter = (
       popout: undefined,
     };
     if (
-      isRouteInit &&
-      isBackHandled &&
-      (state.view !== virtualView ||
-        state.panel !== virtualPanel ||
-        state.modal !== virtualModal ||
-        state.popout !== virtualPopout)
+      (isRouteInit &&
+        isBackHandled &&
+        (state.view !== virtualView ||
+          state.panel !== virtualPanel ||
+          state.modal !== virtualModal ||
+          state.popout !== virtualPopout)) ||
+      (!isRouteInit && virtualView && virtualPanel)
     ) {
       _setActiveView(virtualView as string);
       _setActivePanel(virtualPanel as string);
@@ -73,6 +73,9 @@ export const useInitRouter = (
         modal: virtualModal,
         popout: virtualPopout,
       });
+      if (!isRouteInit) {
+        initRoute();
+      }
     }
   }, [
     virtualView,

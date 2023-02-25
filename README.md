@@ -2,6 +2,8 @@
     <img width="134" src="https://webstockreview.net/images/comet-clipart-meteorite-4.png">
 </div>
 
+# Not stable!
+
 # Description
 
 This library based on [effector](https://www.npmjs.com/package/effector) and window.history.state without changing url and hash. Created for routing vk-mini-apps. I recomend use it with @blumjs/cli.
@@ -22,7 +24,7 @@ const App = () => {
     modal: null,
     popout: null
   });
-  
+
   ...
 }
 ```
@@ -38,8 +40,8 @@ const App = () => {
       panel: "Home",
       modal: null,
       popout: null
-    }, 
-  //first arg is the name of route; second callback, that fired when pushed back in browser 
+    },
+  //first arg is the name of route; second callback, that fired when pushed back in browser
     createDisableBackBrowserRouteMiddleware('Loading', (storeRoutes, prevRoutes) => console.log('loading, please wait...')),
     createRouteMiddleware((storeRoutes, prevRoutes) => {
       if(navigator.onLine){
@@ -50,7 +52,7 @@ const App = () => {
       return false;
     })
   );
-  
+
   ...
 }
 ```
@@ -95,7 +97,7 @@ import { back } from '@blumjs/router';
 back();
 ```
 
-If you need turn off modal and popout in new page (for example, offline page, where user shouldn't see modal and popout) you can use _setActiveModal, _setActivePopout. In other case use back.
+If you need turn off modal and popout in new page (for example, offline page, where user shouldn't see modal and popout) you can use \_setActiveModal, \_setActivePopout. In other case use back.
 
 ```
 import { _setActiveModal, _setActivePopout } from '@blumjs/router';
@@ -103,4 +105,3 @@ import { _setActiveModal, _setActivePopout } from '@blumjs/router';
 _setActiveModal(null);
 _setActivePopout(null);
 ```
-

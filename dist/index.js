@@ -761,7 +761,7 @@ const { useSyncExternalStore: mr } = sr, hr = (e, t) => t ? t.getState(e) : e.ge
 })), Or = (e, ...t) => {
   const { activeView: n, activePanel: r, activeModal: u, activePopout: s, isRouteInit: a, isBackHandled: m } = yr();
   Ve(() => {
-    a || (Et(e.view), Ot(e.panel), e.modal && bt(e.modal), e.popout && Rt(e.popout), gt());
+    a || (Et(e.view), Ot(e.panel), e.modal && bt(e.modal), e.popout && Rt(e.popout));
   }, [a, e.view, e.panel, e.modal, e.popout]);
   const { virtualView: g, virtualPanel: p, virtualModal: h, virtualPopout: c } = yt(gr);
   Ve(() => {
@@ -771,12 +771,12 @@ const { useSyncExternalStore: mr } = sr, hr = (e, t) => t ? t.getState(e) : e.ge
       modal: void 0,
       popout: void 0
     };
-    a && m && (d.view !== g || d.panel !== p || d.modal !== h || d.popout !== c) && (Ie(g), Pe(p), $e(h), Be(c), _t({
+    (a && m && (d.view !== g || d.panel !== p || d.modal !== h || d.popout !== c) || !a && g && p) && (Ie(g), Pe(p), $e(h), Be(c), _t({
       view: g,
       panel: p,
       modal: h,
       popout: c
-    }));
+    }), a || gt());
   }, [
     g,
     p,

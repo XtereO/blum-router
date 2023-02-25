@@ -4,22 +4,34 @@ import {
   $router,
   historyPush,
   initRoute,
+  setBackHandled,
+  _setActiveModal,
+  _setActivePanel,
+  _setActivePopout,
+  _setActiveView,
+} from "./router";
+import { InitRouteOptions, RouteMiddleware, Routes } from "./types";
+import { useEventListener } from "./useEventListener";
+import {
+  $virtualRouter,
   setActiveModal,
   setActivePanel,
   setActivePopout,
   setActiveView,
-  _setActiveModal,
-  _setActivePopout
-} from "./router";
-import { InitRouteOptions, RouteMiddleware, Routes } from "./types";
-import { useEventListener } from "./useEventListener";
+} from "./virtual-router";
 
 export const useInitRouter = (
   options: InitRouteOptions,
   ...middlewares: RouteMiddleware[]
 ) => {
-  const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
-    useRouter();
+  const {
+    activeView,
+    activePanel,
+    activeModal,
+    activePopout,
+    isRouteInit,
+    isBackHandled,
+  } = useRouter();
   useEffect(() => {
     if (!isRouteInit) {
       setActiveView(options.view);
@@ -33,6 +45,9 @@ export const useInitRouter = (
       initRoute();
     }
   }, [isRouteInit, options.view, options.panel, options.modal, options.popout]);
+
+  const { virtualView, virtualPanel, virtualModal, virtualPopout } =
+    useStore($virtualRouter);
   useEffect(() => {
     const state = window.history.state ?? {
       view: undefined,
@@ -42,11 +57,16 @@ export const useInitRouter = (
     };
     if (
       isRouteInit &&
-      (state.view !== activeView ||
-        state.panel !== activePanel ||
-        state.modal !== activeModal ||
-        state.popout !== activePopout)
+      isBackHandled &&
+      (state.view !== virtualView ||
+        state.panel !== virtualPanel ||
+        state.modal !== virtualModal ||
+        state.popout !== virtualPopout)
     ) {
+      _setActiveView(virtualView as string);
+      _setActivePanel(virtualPanel as string);
+      _setActiveModal(virtualModal);
+      _setActivePopout(virtualPopout);
       historyPush({
         view: activeView,
         panel: activePanel,
@@ -54,10 +74,18 @@ export const useInitRouter = (
         popout: activePopout,
       });
     }
-  }, [activeView, activePanel, activeModal, activePopout, isRouteInit]);
+  }, [
+    virtualView,
+    virtualPanel,
+    virtualModal,
+    virtualPopout,
+    isRouteInit,
+    isBackHandled,
+  ]);
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
+      setBackHandled(false);
       const { view, panel, modal, popout } = window.history.state ?? {
         view: undefined,
         panel: undefined,
@@ -87,10 +115,11 @@ export const useInitRouter = (
           return;
         }
       }
-      setActiveView(view);
-      setActivePanel(panel);
+      _setActiveView(view);
+      _setActivePanel(panel);
       _setActiveModal(modal);
       _setActivePopout(popout);
+      setBackHandled(true);
     };
     if (isRouteInit) {
       await changeRoutes();

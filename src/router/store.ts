@@ -1,13 +1,11 @@
 import { createStore } from "effector";
 import {
   initRoute,
-  setActiveModal,
-  setActivePanel,
-  setActivePopout,
-  setActiveView,
   setRoutes,
   _setActiveModal,
-  _setActivePopout
+  _setActivePanel,
+  _setActivePopout,
+  _setActiveView,
 } from "./event";
 
 type Store = {
@@ -16,6 +14,7 @@ type Store = {
   activeModal: string | null;
   activePopout: string | null;
   isRouteInit: boolean;
+  isBackHandled: boolean;
 };
 
 export const $router = createStore<Store>({
@@ -24,26 +23,19 @@ export const $router = createStore<Store>({
   activeModal: null,
   activePopout: null,
   isRouteInit: false,
+  isBackHandled: true,
 })
-  .on(setActiveView, (state, activeView) => ({
+  .on(_setActiveView, (state, activeView) => ({
     ...state,
     activeView,
   }))
-  .on(setActivePanel, (state, activePanel) => ({
+  .on(_setActivePanel, (state, activePanel) => ({
     ...state,
     activePanel,
-  }))
-  .on(setActiveModal, (state, activeModal) => ({
-    ...state,
-    activeModal,
   }))
   .on(_setActiveModal, (state, activeModal) => ({
     ...state,
     activeModal,
-  }))
-  .on(setActivePopout, (state, activePopout) => ({
-    ...state,
-    activePopout,
   }))
   .on(_setActivePopout, (state, activePopout) => ({
     ...state,
@@ -57,7 +49,13 @@ export const $router = createStore<Store>({
   .on(setRoutes, (state, routes) => ({
     ...state,
     activeView: routes.hasOwnProperty("view") ? routes.view : state.activeView,
-    activePanel: routes.hasOwnProperty("panel") ? routes.panel : state.activePanel,
-    activeModal: routes.hasOwnProperty("modal") ? routes.modal : state.activeModal,
-    activePopout: routes.hasOwnProperty("popout") ? routes.popout : state.activePopout,
+    activePanel: routes.hasOwnProperty("panel")
+      ? routes.panel
+      : state.activePanel,
+    activeModal: routes.hasOwnProperty("modal")
+      ? routes.modal
+      : state.activeModal,
+    activePopout: routes.hasOwnProperty("popout")
+      ? routes.popout
+      : state.activePopout,
   }));

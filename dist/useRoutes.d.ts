@@ -6,6 +6,7 @@ export declare const useRouter: () => {
     activeModal: string | null;
     activePopout: string | null;
     isRouteInit: boolean;
+    isBackHandled: boolean;
 };
 export declare const createRouteMiddleware: (callback: RouteMiddleware) => RouteMiddleware;
 export declare const createDisableBackBrowserRouteMiddleware: (route: string, callback?: ((storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>) | undefined) => (storeRoutes: Routes, prevRoutes: Routes) => boolean;

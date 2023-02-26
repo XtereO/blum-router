@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import { blumRouter, BlumRouterEventKey } from "./blum-router";
 
 export const useEventListener = <K extends keyof WindowEventMap>(
   eventListen: K,
   callback: (e: WindowEventMap[K]) => void,
-  eventKey?: string,
+  eventKey?: string
 ) => {
   useEffect(() => {
     const eventHandler = (event: WindowEventMap[K]) => {
@@ -17,4 +18,15 @@ export const useEventListener = <K extends keyof WindowEventMap>(
     window.addEventListener(eventListen, eventHandler);
     return () => window.removeEventListener(eventListen, eventHandler);
   }, [eventListen, eventKey, callback]);
+};
+
+export const useBlumEventListener = <K extends keyof BlumRouterEventKey>(
+  eventListen: K,
+  callback: (payload: BlumRouterEventKey[K]) => void,
+  index: number
+) => {
+  useEffect(() => {
+    blumRouter.addEventListener(eventListen, callback, index);
+    return () => blumRouter.removeEventListener(index);
+  }, [eventListen, index, callback]);
 };

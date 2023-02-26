@@ -1,94 +1,33 @@
 import { useStore } from "effector-react";
 import { useEffect } from "react";
+import { blumRouter } from "./blum-router";
 import {
   $router,
   historyPush,
   initRoute,
-  setBackHandled,
   _setActiveModal,
-  _setActivePanel,
   _setActivePopout,
-  _setActiveView,
+  _setActiveViewPanel,
 } from "./router";
 import { InitRouteOptions, RouteMiddleware, Routes } from "./types";
-import { useEventListener } from "./useEventListener";
-import {
-  $virtualRouter,
-  setActiveModal,
-  setActivePanel,
-  setActivePopout,
-  setActiveView,
-} from "./virtual-router";
+import { useBlumEventListener, useEventListener } from "./useEventListener";
 
 export const useInitRouter = (
   options: InitRouteOptions,
   ...middlewares: RouteMiddleware[]
 ) => {
-  const {
-    activeView,
-    activePanel,
-    activeModal,
-    activePopout,
-    isRouteInit,
-    isBackHandled,
-  } = useRouter();
+  const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
+    useRouter();
   useEffect(() => {
     if (!isRouteInit) {
-      setActiveView(options.view);
-      setActivePanel(options.panel);
-      if (options.modal) {
-        setActiveModal(options.modal);
-      }
-      if (options.popout) {
-        setActivePopout(options.popout);
-      }
+      historyPush(options);
+      initRoute();
     }
-  }, [isRouteInit, options.view, options.panel, options.modal, options.popout]);
-
-  const { virtualView, virtualPanel, virtualModal, virtualPopout } =
-    useStore($virtualRouter);
-  useEffect(() => {
-    const state = window.history.state ?? {
-      view: undefined,
-      panel: undefined,
-      modal: undefined,
-      popout: undefined,
-    };
-    if (
-      (isRouteInit &&
-        isBackHandled &&
-        (state.view !== virtualView ||
-          state.panel !== virtualPanel ||
-          state.modal !== virtualModal ||
-          state.popout !== virtualPopout)) ||
-      (!isRouteInit && virtualView && virtualPanel)
-    ) {
-      _setActiveView(virtualView as string);
-      _setActivePanel(virtualPanel as string);
-      _setActiveModal(virtualModal);
-      _setActivePopout(virtualPopout);
-      historyPush({
-        view: virtualView,
-        panel: virtualPanel,
-        modal: virtualModal,
-        popout: virtualPopout,
-      });
-      if (!isRouteInit) {
-        initRoute();
-      }
-    }
-  }, [
-    virtualView,
-    virtualPanel,
-    virtualModal,
-    virtualPopout,
-    isRouteInit,
-    isBackHandled,
-  ]);
+  }, [isRouteInit, options]);
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
-      setBackHandled(false);
+      blumRouter.fireChangeStateEvent();
       const { view, panel, modal, popout } = window.history.state ?? {
         view: undefined,
         panel: undefined,
@@ -118,17 +57,27 @@ export const useInitRouter = (
           return;
         }
       }
-      _setActiveView(view);
-      _setActivePanel(panel);
-      _setActiveModal(modal);
-      _setActivePopout(popout);
-      setBackHandled(true);
     };
     if (isRouteInit) {
       await changeRoutes();
       window.isBackFromBrowser = true;
     }
   });
+  useBlumEventListener(
+    "changestate",
+    (payload) => {
+      console.log("[blum]: state changed", payload);
+      if (payload) {
+        const { view, panel, modal, popout } = payload;
+        if (view && panel) {
+          _setActiveViewPanel({ view, panel });
+        }
+        _setActiveModal(modal);
+        _setActivePopout(popout);
+      }
+    },
+    1
+  );
 };
 
 export const useRouter = () => useStore($router);

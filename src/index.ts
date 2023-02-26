@@ -1,7 +1,10 @@
 import {
   back,
   historyPush,
-  setRoutes,
+  setActiveModal,
+  setActivePanel,
+  setActivePopout,
+  setActiveViewPanel,
   _setActiveModal,
   _setActivePanel,
   _setActivePopout,
@@ -13,12 +16,6 @@ import {
   useInitRouter,
   useRouter,
 } from "./useRoutes";
-import {
-  setActiveModal,
-  setActivePanel,
-  setActivePopout,
-  setActiveView,
-} from "./virtual-router";
 
 export {
   useRouter,
@@ -26,7 +23,7 @@ export {
   createDisableBackBrowserRouteMiddleware,
   createRouteMiddleware,
   setActiveModal,
-  setActiveView,
+  setActiveViewPanel,
   setActivePanel,
   setActivePopout,
   back,
@@ -34,6 +31,5 @@ export {
   _setActivePanel,
   _setActiveModal,
   _setActivePopout,
-  setRoutes,
   historyPush,
 };

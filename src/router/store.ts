@@ -1,11 +1,12 @@
 import { createStore } from "effector";
 import {
   initRoute,
-  setRoutes,
+  setBackHandled,
   _setActiveModal,
   _setActivePanel,
   _setActivePopout,
   _setActiveView,
+  _setActiveViewPanel,
 } from "./event";
 
 type Store = {
@@ -45,17 +46,12 @@ export const $router = createStore<Store>({
     ...state,
     isRouteInit: true,
   }))
-  //@ts-ignore
-  .on(setRoutes, (state, routes) => ({
+  .on(_setActiveViewPanel, (state, { view, panel }) => ({
     ...state,
-    activeView: routes.hasOwnProperty("view") ? routes.view : state.activeView,
-    activePanel: routes.hasOwnProperty("panel")
-      ? routes.panel
-      : state.activePanel,
-    activeModal: routes.hasOwnProperty("modal")
-      ? routes.modal
-      : state.activeModal,
-    activePopout: routes.hasOwnProperty("popout")
-      ? routes.popout
-      : state.activePopout,
+    activeView: view,
+    activePanel: panel,
+  }))
+  .on(setBackHandled, (state, isBackHandled) => ({
+    ...state,
+    isBackHandled,
   }));

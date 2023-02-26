@@ -1,8 +1,7 @@
 import { useStore } from "effector-react";
-import { blumRouter } from "./blum-router";
+import { blumRouter, historyPush } from "./blum-router";
 import {
   $router,
-  historyPush,
   initRoute,
   _setActiveModal,
   _setActivePopout,

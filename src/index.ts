@@ -1,7 +1,5 @@
-import { blumRouter } from "./blum-router";
+import { back, blumRouter, historyPush } from "./blum-router";
 import {
-  back,
-  historyPush,
   setActiveModal,
   setActivePanel,
   setActivePopout,

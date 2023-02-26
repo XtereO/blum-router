@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { blumRouter, BlumRouterEventKey } from "./blum-router";
+import { blumRouter, BlumRouterEventMap } from "./blum-router";
 
 export const useEventListener = <K extends keyof WindowEventMap>(
   eventListen: K,
@@ -20,9 +20,9 @@ export const useEventListener = <K extends keyof WindowEventMap>(
   }, [eventListen, eventKey, callback]);
 };
 
-export const useBlumEventListener = <K extends keyof BlumRouterEventKey>(
+export const useBlumEventListener = <K extends keyof BlumRouterEventMap>(
   eventListen: K,
-  callback: (payload: BlumRouterEventKey[K]) => void,
+  callback: (payload: BlumRouterEventMap[K]) => void,
   index: number
 ) => {
   useEffect(() => {

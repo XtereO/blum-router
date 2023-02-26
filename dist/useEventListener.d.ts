@@ -1,3 +1,3 @@
-import { BlumRouterEventKey } from "./blum-router";
+import { BlumRouterEventMap } from "./blum-router";
 export declare const useEventListener: <K extends keyof WindowEventMap>(eventListen: K, callback: (e: WindowEventMap[K]) => void, eventKey?: string) => void;
-export declare const useBlumEventListener: <K extends "changestate">(eventListen: K, callback: (payload: BlumRouterEventKey[K]) => void, index: number) => void;
+export declare const useBlumEventListener: <K extends keyof BlumRouterEventMap>(eventListen: K, callback: (payload: BlumRouterEventMap[K]) => void, index: number) => void;

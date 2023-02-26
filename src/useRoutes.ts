@@ -1,5 +1,4 @@
 import { useStore } from "effector-react";
-import { useEffect } from "react";
 import { blumRouter } from "./blum-router";
 import {
   $router,
@@ -17,31 +16,17 @@ export const useInitRouter = (
   ...middlewares: RouteMiddleware[]
 ) => {
   useBlumEventListener(
-    "changestate",
+    "init",
     (payload) => {
-      console.log("[blum]: state changed", payload);
-      if (payload) {
-        const { view, panel, modal, popout } = payload;
-        if (view && panel) {
-          _setActiveViewPanel({ view, panel });
-        }
-        _setActiveModal(modal);
-        _setActivePopout(popout);
-        if (!isRouteInit) {
-          initRoute();
-        }
+      console.log("[blum]: initialized", payload);
+      if (!isRouteInit) {
+        historyPush(options);
       }
     },
     1
   );
-
   const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
     useRouter();
-  useEffect(() => {
-    if (!isRouteInit) {
-      historyPush(options);
-    }
-  }, [isRouteInit, options]);
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
@@ -81,6 +66,24 @@ export const useInitRouter = (
       window.isBackFromBrowser = true;
     }
   });
+  useBlumEventListener(
+    "changestate",
+    (payload) => {
+      console.log("[blum]: state changed", payload);
+      if (payload) {
+        const { view, panel, modal, popout } = payload;
+        if (view && panel) {
+          _setActiveViewPanel({ view, panel });
+        }
+        _setActiveModal(modal);
+        _setActivePopout(popout);
+        if (!isRouteInit) {
+          initRoute();
+        }
+      }
+    },
+    2
+  );
 };
 
 export const useRouter = () => useStore($router);

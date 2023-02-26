@@ -1,13 +1,12 @@
-import { createEffect } from "effector";
 import { blumRouter } from "src/blum-router";
 import { Routes } from "src/types";
 
-export const back = createEffect(() => {
+export const back = () => {
   window.isBackFromBrowser = false;
   window.history.back();
-});
+};
 
-export const historyPush = createEffect<Partial<Routes>, void>((routes) => {
+export const historyPush = (routes: Partial<Routes>) => {
   const { view, panel, modal, popout } = window.history.state ?? {
     view: undefined,
     panel: undefined,
@@ -21,20 +20,17 @@ export const historyPush = createEffect<Partial<Routes>, void>((routes) => {
     modal: routes.hasOwnProperty("modal") ? routes.modal : modal,
     popout: routes.hasOwnProperty("popout") ? routes.popout : popout,
   });
-});
+};
 
-export const setActiveViewPanel = createEffect<
-  { view: string; panel: string },
-  void
->((routes) => {
+export const setActiveViewPanel = (routes: { view: string; panel: string }) => {
   historyPush({ view: routes.view, panel: routes.panel });
-});
-export const setActivePanel = createEffect<string, void>((panel) => {
+};
+export const setActivePanel = (panel: string) => {
   historyPush({ panel });
-});
-export const setActiveModal = createEffect<string, void>((modal) => {
+};
+export const setActiveModal = (modal: string) => {
   historyPush({ modal });
-});
-export const setActivePopout = createEffect<string, void>((popout) => {
+};
+export const setActivePopout = (popout: string) => {
   historyPush({ popout });
-});
+};

@@ -1,10 +1,10 @@
 import { Routes } from "src/types";
-export declare const back: import("effector").Effect<void, void, Error>;
-export declare const historyPush: import("effector").Effect<Partial<Routes>, void, Error>;
-export declare const setActiveViewPanel: import("effector").Effect<{
+export declare const back: () => void;
+export declare const historyPush: (routes: Partial<Routes>) => void;
+export declare const setActiveViewPanel: (routes: {
     view: string;
     panel: string;
-}, void, Error>;
-export declare const setActivePanel: import("effector").Effect<string, void, Error>;
-export declare const setActiveModal: import("effector").Effect<string, void, Error>;
-export declare const setActivePopout: import("effector").Effect<string, void, Error>;
+}) => void;
+export declare const setActivePanel: (panel: string) => void;
+export declare const setActiveModal: (modal: string) => void;
+export declare const setActivePopout: (popout: string) => void;

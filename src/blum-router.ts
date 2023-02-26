@@ -3,8 +3,12 @@ import { Routes } from "./types";
 export const blumRouter = {
   subscribers: [] as Subscriber[],
   changeState(routes: BlumRouterEventKey["changestate"]) {
-    window.history.pushState(routes, "");
-    this.fireChangeStateEvent();
+    try {
+      window.history.pushState(routes, "");
+      this.fireChangeStateEvent();
+    } catch (e) {
+      console.log("changeState err", e);
+    }
   },
   fireChangeStateEvent() {
     this._trigerEvent("changestate", window.history.state);

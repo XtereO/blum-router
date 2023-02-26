@@ -16,12 +16,30 @@ export const useInitRouter = (
   options: InitRouteOptions,
   ...middlewares: RouteMiddleware[]
 ) => {
+  useBlumEventListener(
+    "changestate",
+    (payload) => {
+      console.log("[blum]: state changed", payload);
+      if (payload) {
+        const { view, panel, modal, popout } = payload;
+        if (view && panel) {
+          _setActiveViewPanel({ view, panel });
+        }
+        _setActiveModal(modal);
+        _setActivePopout(popout);
+        if (!isRouteInit) {
+          initRoute();
+        }
+      }
+    },
+    1
+  );
+
   const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
     useRouter();
   useEffect(() => {
     if (!isRouteInit) {
       historyPush(options);
-      initRoute();
     }
   }, [isRouteInit, options]);
 
@@ -63,21 +81,6 @@ export const useInitRouter = (
       window.isBackFromBrowser = true;
     }
   });
-  useBlumEventListener(
-    "changestate",
-    (payload) => {
-      console.log("[blum]: state changed", payload);
-      if (payload) {
-        const { view, panel, modal, popout } = payload;
-        if (view && panel) {
-          _setActiveViewPanel({ view, panel });
-        }
-        _setActiveModal(modal);
-        _setActivePopout(popout);
-      }
-    },
-    1
-  );
 };
 
 export const useRouter = () => useStore($router);

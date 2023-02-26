@@ -1,3 +1,4 @@
+import { blumRouter } from "./blum-router";
 import {
   back,
   historyPush,
@@ -19,6 +20,7 @@ import {
 
 export {
   useRouter,
+  blumRouter,
   useInitRouter,
   createDisableBackBrowserRouteMiddleware,
   createRouteMiddleware,

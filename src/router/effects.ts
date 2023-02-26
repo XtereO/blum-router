@@ -14,6 +14,7 @@ export const historyPush = createEffect<Partial<Routes>, void>((routes) => {
     modal: undefined,
     popout: undefined,
   };
+  console.log("try to push history", blumRouter.subscribers);
   blumRouter.changeState({
     view: routes.hasOwnProperty("view") ? routes.view : view,
     panel: routes.hasOwnProperty("panel") ? routes.panel : panel,

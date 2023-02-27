@@ -1,7 +1,8 @@
 {
   "name": "@blumjs/router",
-  "version": "6.4.0",
+  "version": "6.7.0",
   "description": "",
+  "main": "./src/main.tsx",
   "exports": {
     ".": "./dist/index.js"
   },

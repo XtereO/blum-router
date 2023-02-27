@@ -1,14 +1,18 @@
-import { historyPush } from "src/blum-router";
+import { blumRouter } from "src/blum-router";
 
+export const back = () => {
+  window.isBackFromBrowser = false;
+  window.history.back();
+};
 export const setActiveViewPanel = (routes: { view: string; panel: string }) => {
-  historyPush({ view: routes.view, panel: routes.panel });
+  blumRouter.historyPush({ view: routes.view, panel: routes.panel });
 };
 export const setActivePanel = (panel: string) => {
-  historyPush({ panel });
+  blumRouter.historyPush({ panel });
 };
 export const setActiveModal = (modal: string) => {
-  historyPush({ modal });
+  blumRouter.historyPush({ modal });
 };
 export const setActivePopout = (popout: string) => {
-  historyPush({ popout });
+  blumRouter.historyPush({ popout });
 };

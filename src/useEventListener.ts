@@ -23,10 +23,11 @@ export const useEventListener = <K extends keyof WindowEventMap>(
 export const useBlumEventListener = <K extends keyof BlumRouterEventMap>(
   eventListen: K,
   callback: (payload: BlumRouterEventMap[K]) => void,
-  index: number
+  index: number,
+  deps: unknown[]
 ) => {
   useEffect(() => {
     blumRouter.addEventListener(eventListen, callback, index);
     return () => blumRouter.removeEventListener(index);
-  }, [eventListen, index, callback]);
+  }, [...deps]);
 };

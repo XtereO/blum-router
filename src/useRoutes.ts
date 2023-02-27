@@ -1,5 +1,5 @@
 import { useStore } from "effector-react";
-import { blumRouter, historyPush } from "./blum-router";
+import { blumRouter } from "./blum-router";
 import {
   $router,
   initRoute,
@@ -14,18 +14,19 @@ export const useInitRouter = (
   options: InitRouteOptions,
   ...middlewares: RouteMiddleware[]
 ) => {
+  const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
+    useRouter();
   useBlumEventListener(
     "init",
     (payload) => {
       console.log("[blum]: initialized", payload);
       if (!isRouteInit) {
-        historyPush(options);
+        blumRouter.historyPush(options);
       }
     },
-    1
+    1,
+    [isRouteInit]
   );
-  const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
-    useRouter();
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
@@ -81,7 +82,8 @@ export const useInitRouter = (
         }
       }
     },
-    2
+    2,
+    [isRouteInit]
   );
 };
 
@@ -103,7 +105,7 @@ export const createDisableBackBrowserRouteMiddleware = (
       if (callback) {
         callback(storeRoutes, prevRoutes);
       }
-      historyPush(storeRoutes);
+      blumRouter.historyPush(storeRoutes);
       return false;
     }
     return true;

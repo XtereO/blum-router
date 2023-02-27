@@ -6,6 +6,11 @@ import { resolve } from "path";
 import { typescriptPaths } from "rollup-plugin-typescript-paths";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      src: "/src",
+    },
+  },
   plugins: [react()],
   build: {
     manifest: true,

@@ -2,10 +2,6 @@ import { Routes } from "./types";
 
 export const blumRouter = {
   subscribers: [] as Subscriber[],
-  back() {
-    window.isBackFromBrowser = false;
-    window.history.back();
-  },
   historyPush(routes: Partial<Routes>) {
     const { view, panel, modal, popout } = window.history.state ?? {
       view: undefined,
@@ -13,7 +9,7 @@ export const blumRouter = {
       modal: undefined,
       popout: undefined,
     };
-    console.log("try to push history", this.subscribers);
+    console.log("try to push history", this);
     this.changeState({
       view: routes.hasOwnProperty("view") ? routes.view : view,
       panel: routes.hasOwnProperty("panel") ? routes.panel : panel,
@@ -53,9 +49,6 @@ export const blumRouter = {
     this.subscribers.forEach((s) => s.type === type && s.callback(payload));
   },
 };
-
-export const historyPush = blumRouter.historyPush.bind(blumRouter);
-export const back = blumRouter.back.bind(blumRouter);
 
 export type BlumRouterEventMap = {
   changestate: Routes | null;

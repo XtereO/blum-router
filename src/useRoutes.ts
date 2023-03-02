@@ -3,6 +3,7 @@ import { blumRouter } from "./blum-router";
 import {
   $router,
   initRoute,
+  setBackHandlerOptions,
   _setActiveModal,
   _setActivePopout,
   _setActiveViewPanel,
@@ -30,7 +31,9 @@ export const useInitRouter = (
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
-      blumRouter.fireChangeStateEvent();
+      if (window.blumRouter.isDispatchChangeStateEventBeforeMiddleware) {
+        blumRouter.dispatchChangeStateEvent();
+      }
       const { view, panel, modal, popout } = window.history.state ?? {
         view: undefined,
         panel: undefined,
@@ -60,10 +63,28 @@ export const useInitRouter = (
           return;
         }
       }
+      if (window.blumRouter.isDispatchChangeStateEventAfterMiddleware) {
+        blumRouter.dispatchChangeStateEvent();
+      }
     };
     if (isRouteInit) {
+      if (window.blumRouter.beforeBackHandledCallback) {
+        window.blumRouter.beforeBackHandledCallback();
+      }
+
       await changeRoutes();
-      window.isBackFromBrowser = true;
+      window.blumRouter.isBackFromBrowser = true;
+
+      if (window.blumRouter.afterBackHandledCallback) {
+        window.blumRouter.afterBackHandledCallback();
+      }
+
+      setBackHandlerOptions({
+        beforeBackHandledCallback: null,
+        afterBackHandledCallback: null,
+        isDispatchChangeStateEventBeforeMiddleware: false,
+        isDispatchChangeStateEventAfterMiddleware: true,
+      });
     }
   });
   useBlumEventListener(
@@ -94,18 +115,31 @@ export const createDisableBackBrowserRouteMiddleware = (
   route: string,
   callback?: (storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>
 ) => {
+  return createCatchBackBrowserRouteMiddleware(
+    route,
+    (storeRoutes, prevRoutes) => {
+      if (callback) {
+        callback(storeRoutes, prevRoutes);
+      }
+      blumRouter.historyPush(storeRoutes);
+    }
+  );
+};
+export const createCatchBackBrowserRouteMiddleware = (
+  route: string,
+  callback?: (storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>
+) => {
   return (storeRoutes: Routes, prevRoutes: Routes) => {
     const routes: (keyof Routes)[] = ["view", "panel", "modal", "popout"];
     if (
       routes.some(
         (r) => storeRoutes[r] === route && storeRoutes[r] !== prevRoutes[r]
       ) &&
-      window.isBackFromBrowser
+      window.blumRouter.isBackFromBrowser
     ) {
       if (callback) {
         callback(storeRoutes, prevRoutes);
       }
-      blumRouter.historyPush(storeRoutes);
       return false;
     }
     return true;

@@ -1,6 +1,6 @@
 {
   "name": "@blumjs/router",
-  "version": "6.12.0",
+  "version": "7.1.0",
   "description": "",
   "exports": {
     ".": "./dist/index.js"

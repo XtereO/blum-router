@@ -20,12 +20,12 @@ export const blumRouter = {
   changeState(routes: BlumRouterEventMap["changestate"]) {
     try {
       window.history.pushState(routes, "");
-      this.fireChangeStateEvent();
+      this.dispatchChangeStateEvent();
     } catch (e) {
       console.log("changeState err", e);
     }
   },
-  fireChangeStateEvent() {
+  dispatchChangeStateEvent() {
     this._trigerEvent("changestate", window.history.state);
   },
   addEventListener<K extends keyof BlumRouterEventMap>(

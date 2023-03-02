@@ -28,6 +28,15 @@ export const setBackHandlerOptions = ({
       isDispatchChangeStateEventBeforeMiddleware;
   }
 };
+export const setDefaultBackHandlerOptions = () => {
+  window.blumRouter = {
+    isBackFromBrowser: true,
+    beforeBackHandledCallback: null,
+    afterBackHandledCallback: null,
+    isDispatchChangeStateEventBeforeMiddleware: false,
+    isDispatchChangeStateEventAfterMiddleware: true,
+  };
+};
 export const setActiveViewPanel = (routes: { view: string; panel: string }) => {
   blumRouter.historyPush({ view: routes.view, panel: routes.panel });
 };

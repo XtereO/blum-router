@@ -3,7 +3,7 @@ import { blumRouter } from "./blum-router";
 import {
   $router,
   initRoute,
-  setBackHandlerOptions,
+  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePopout,
   _setActiveViewPanel,
@@ -22,6 +22,7 @@ export const useInitRouter = (
     (payload) => {
       console.log("[blum]: initialized", payload);
       if (!isRouteInit) {
+        setDefaultBackHandlerOptions();
         blumRouter.historyPush(options);
       }
     },
@@ -79,12 +80,7 @@ export const useInitRouter = (
         window.blumRouter.afterBackHandledCallback();
       }
 
-      setBackHandlerOptions({
-        beforeBackHandledCallback: null,
-        afterBackHandledCallback: null,
-        isDispatchChangeStateEventBeforeMiddleware: false,
-        isDispatchChangeStateEventAfterMiddleware: true,
-      });
+      setDefaultBackHandlerOptions();
     }
   });
   useBlumEventListener(

@@ -1,14 +1,16 @@
 interface Window {
   blumRouter: {
-    beforeBackHandledCallback: () => void | null;
-    afterBackHandledCallback: () => void | null;
+    beforeBackHandledCallback: (() => void) | null;
+    afterBackHandledCallback: (() => void) | null;
     isDispatchChangeStateEventBeforeMiddleware: boolean;
     isDispatchChangeStateEventAfterMiddleware: boolean;
     isBackFromBrowser: boolean;
   };
 }
-window.blumRouter.isBackFromBrowser = true;
-window.blumRouter.beforeBackHandledCallback = null;
-window.blumRouter.afterBackHandledCallback = null;
-window.blumRouter.isDispatchChangeStateEventBeforeMiddleware = false;
-window.blumRouter.isDispatchChangeStateEventAfterMiddleware = true;
+window.blumRouter = {
+  isBackFromBrowser: true,
+  beforeBackHandledCallback: null,
+  afterBackHandledCallback: null,
+  isDispatchChangeStateEventBeforeMiddleware: false,
+  isDispatchChangeStateEventAfterMiddleware: true,
+};

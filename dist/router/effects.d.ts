@@ -1,5 +1,6 @@
 export declare const back: (options?: BackHandlerOptions) => void;
 export declare const setBackHandlerOptions: ({ beforeBackHandledCallback, afterBackHandledCallback, isDispatchChangeStateEventAfterMiddleware, isDispatchChangeStateEventBeforeMiddleware, }: BackHandlerOptions) => void;
+export declare const setDefaultBackHandlerOptions: () => void;
 export declare const setActiveViewPanel: (routes: {
     view: string;
     panel: string;

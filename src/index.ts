@@ -5,8 +5,6 @@ import {
   setActivePanel,
   setActivePopout,
   setActiveViewPanel,
-  setBackHandlerOptions,
-  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePanel,
   _setActivePopout,
@@ -22,7 +20,6 @@ import {
 
 export {
   createCatchBackBrowserRouteMiddleware,
-  setBackHandlerOptions,
   useRouter,
   blumRouter,
   useInitRouter,
@@ -32,7 +29,6 @@ export {
   setActiveViewPanel,
   setActivePanel,
   setActivePopout,
-  setDefaultBackHandlerOptions,
   back,
   _setActiveView,
   _setActivePanel,

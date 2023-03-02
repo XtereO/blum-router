@@ -3,7 +3,6 @@ import { blumRouter } from "./blum-router";
 import {
   $router,
   initRoute,
-  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePopout,
   _setActiveViewPanel,
@@ -22,7 +21,7 @@ export const useInitRouter = (
     (payload) => {
       console.log("[blum]: initialized", payload);
       if (!isRouteInit) {
-        setDefaultBackHandlerOptions();
+        blumRouter.setDefaultBackHandlerOptions();
         blumRouter.historyPush(options);
       }
     },
@@ -32,7 +31,7 @@ export const useInitRouter = (
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
-      if (window.blumRouter.isDispatchChangeStateEventBeforeMiddleware) {
+      if (blumRouter.isDispatchChangeStateEventBeforeMiddleware) {
         blumRouter.dispatchChangeStateEvent();
       }
       const { view, panel, modal, popout } = window.history.state ?? {
@@ -64,23 +63,23 @@ export const useInitRouter = (
           return;
         }
       }
-      if (window.blumRouter.isDispatchChangeStateEventAfterMiddleware) {
+      if (blumRouter.isDispatchChangeStateEventAfterMiddleware) {
         blumRouter.dispatchChangeStateEvent();
       }
     };
     if (isRouteInit) {
-      if (window.blumRouter.beforeBackHandledCallback) {
-        window.blumRouter.beforeBackHandledCallback();
+      if (blumRouter.beforeBackHandledCallback) {
+        blumRouter.beforeBackHandledCallback();
       }
 
       await changeRoutes();
-      window.blumRouter.isBackFromBrowser = true;
+      blumRouter.isBackFromBrowser = true;
 
-      if (window.blumRouter.afterBackHandledCallback) {
-        window.blumRouter.afterBackHandledCallback();
+      if (blumRouter.afterBackHandledCallback) {
+        blumRouter.afterBackHandledCallback();
       }
 
-      setDefaultBackHandlerOptions();
+      blumRouter.setDefaultBackHandlerOptions();
     }
   });
   useBlumEventListener(
@@ -131,7 +130,7 @@ export const createCatchBackBrowserRouteMiddleware = (
       routes.some(
         (r) => storeRoutes[r] === route && storeRoutes[r] !== prevRoutes[r]
       ) &&
-      window.blumRouter.isBackFromBrowser
+      blumRouter.isBackFromBrowser
     ) {
       if (callback) {
         callback(storeRoutes, prevRoutes);

@@ -1,6 +1,13 @@
 import { Routes } from "./types";
 export declare const blumRouter: {
+    isDispatchChangeStateEventBeforeMiddleware: boolean;
+    isDispatchChangeStateEventAfterMiddleware: boolean;
+    beforeBackHandledCallback: (() => void) | null;
+    isBackFromBrowser: boolean;
+    afterBackHandledCallback: (() => void) | null;
     subscribers: Subscriber[];
+    setDefaultBackHandlerOptions(): void;
+    setBackHandlerOptions(options: BackHandlerOptions): void;
     historyPush(routes: Partial<Routes>): void;
     changeState(routes: BlumRouterEventMap["changestate"]): void;
     dispatchChangeStateEvent(): void;
@@ -16,4 +23,11 @@ export type Subscriber = {
     type: keyof BlumRouterEventMap;
     callback: <K extends keyof BlumRouterEventMap>(payload: BlumRouterEventMap[K]) => void;
     index: number;
+};
+export type BackHandlerOptions = {
+    beforeBackHandledCallback?: (() => void) | null;
+    afterBackHandledCallback?: (() => void) | null;
+    isDispatchChangeStateEventBeforeMiddleware?: boolean;
+    isDispatchChangeStateEventAfterMiddleware?: boolean;
+    isBackFromBrowser?: boolean;
 };

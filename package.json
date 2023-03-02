@@ -1,6 +1,6 @@
 {
   "name": "@blumjs/router",
-  "version": "7.2.1",
+  "version": "7.5.0",
   "description": "",
   "exports": {
     ".": "./dist/index.js"
@@ -14,7 +14,7 @@
     "build": "tsc && vite build",
     "build:watch": "tsc && vite build --watch",
     "dev": "vite",
-    "deploy": "npm run build & npm publish"
+    "deploy": "npm run build && npm publish"
   },
   "keywords": [],
   "author": "",

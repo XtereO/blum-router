@@ -10,7 +10,7 @@ export const back = (options?: BackHandlerOptions) => {
   ) {
     blumRouter.setBackHandlerOptions({ isBackFromBrowser: false });
   }
-  history.back();
+  window.history.back();
 };
 export const setActiveViewPanel = (routes: { view: string; panel: string }) => {
   blumRouter.historyPush({ view: routes.view, panel: routes.panel });

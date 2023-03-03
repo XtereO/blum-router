@@ -108,23 +108,33 @@ export const useRouter = () => useStore($router);
 export const createRouteMiddleware = (callback: RouteMiddleware) => callback;
 export const createDisableBackBrowserRouteMiddleware = (
   route: string,
-  callback?: (storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>
+  callback?: (
+    storeRoutes: Routes,
+    prevRoutes: Routes
+  ) => (void | boolean) | Promise<void | boolean>
 ) => {
   return createCatchBackBrowserRouteMiddleware(
     route,
-    (storeRoutes, prevRoutes) => {
+    async (storeRoutes, prevRoutes) => {
+      let res: boolean | void = undefined;
       if (callback) {
-        callback(storeRoutes, prevRoutes);
+        res = await callback(storeRoutes, prevRoutes);
       }
       blumRouter.historyPush(storeRoutes);
+      if (typeof res === "boolean") {
+        return res;
+      }
     }
   );
 };
 export const createCatchBackBrowserRouteMiddleware = (
   route: string,
-  callback?: (storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>
+  callback?: (
+    storeRoutes: Routes,
+    prevRoutes: Routes
+  ) => (void | boolean) | Promise<void | boolean>
 ) => {
-  return (storeRoutes: Routes, prevRoutes: Routes) => {
+  return async (storeRoutes: Routes, prevRoutes: Routes) => {
     const routes: (keyof Routes)[] = ["view", "panel", "modal", "popout"];
     if (
       routes.some(
@@ -133,7 +143,10 @@ export const createCatchBackBrowserRouteMiddleware = (
       blumRouter.isBackFromBrowser
     ) {
       if (callback) {
-        callback(storeRoutes, prevRoutes);
+        const res = await callback(storeRoutes, prevRoutes);
+        if (typeof res === "boolean") {
+          return res;
+        }
       }
       return false;
     }

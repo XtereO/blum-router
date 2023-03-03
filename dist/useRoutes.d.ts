@@ -9,5 +9,5 @@ export declare const useRouter: () => {
     isBackHandled: boolean;
 };
 export declare const createRouteMiddleware: (callback: RouteMiddleware) => RouteMiddleware;
-export declare const createDisableBackBrowserRouteMiddleware: (route: string, callback?: ((storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>) | undefined) => (storeRoutes: Routes, prevRoutes: Routes) => boolean;
-export declare const createCatchBackBrowserRouteMiddleware: (route: string, callback?: ((storeRoutes: Routes, prevRoutes: Routes) => void | Promise<void>) | undefined) => (storeRoutes: Routes, prevRoutes: Routes) => boolean;
+export declare const createDisableBackBrowserRouteMiddleware: (route: string, callback?: ((storeRoutes: Routes, prevRoutes: Routes) => (void | boolean) | Promise<void | boolean>) | undefined) => (storeRoutes: Routes, prevRoutes: Routes) => Promise<boolean>;
+export declare const createCatchBackBrowserRouteMiddleware: (route: string, callback?: ((storeRoutes: Routes, prevRoutes: Routes) => (void | boolean) | Promise<void | boolean>) | undefined) => (storeRoutes: Routes, prevRoutes: Routes) => Promise<boolean>;

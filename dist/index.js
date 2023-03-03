@@ -54,7 +54,7 @@ const O = {
     this.subscribers.forEach((r) => r.type === e && r.callback(t));
   }
 }, fr = (e) => {
-  e && O.setBackHandlerOptions(e), (!e || !e.hasOwnProperty("isBackFromBrowser")) && O.setBackHandlerOptions({ isBackFromBrowser: !1 }), history.back();
+  e && O.setBackHandlerOptions(e), (!e || !e.hasOwnProperty("isBackFromBrowser")) && O.setBackHandlerOptions({ isBackFromBrowser: !1 }), window.history.back();
 }, dr = (e) => {
   O.historyPush({ view: e.view, panel: e.panel });
 }, pr = (e) => {
@@ -75,42 +75,42 @@ function j(e, t) {
   if (!e)
     throw Error(t);
 }
-function P({ node: e = [], from: t, source: r, parent: n = t || r, to: o, target: s, child: a = o || s, scope: p = {}, meta: g = {}, family: c = { type: "regular" }, regional: S } = {}) {
-  let u = oe(n), d = oe(c.links), f = oe(c.owners), i = [];
-  L(e, (v) => v && V(i, v));
-  let l = { id: Ct(), seq: i, next: oe(a), meta: g, scope: p, family: { type: c.type || "crosslink", links: d, owners: f } };
+function P({ node: e = [], from: t, source: r, parent: n = t || r, to: o, target: i, child: a = o || i, scope: p = {}, meta: g = {}, family: c = { type: "regular" }, regional: S } = {}) {
+  let u = oe(n), d = oe(c.links), f = oe(c.owners), s = [];
+  L(e, (v) => v && V(s, v));
+  let l = { id: Ct(), seq: s, next: oe(a), meta: g, scope: p, family: { type: c.type || "crosslink", links: d, owners: f } };
   return L(d, (v) => V(ce(v), l)), L(f, (v) => V(fe(v), l)), L(u, (v) => V(v.next, l)), S && z && ot(J(z), [l]), l;
 }
 function et(e, t, r) {
-  let n, o = D, s = null, a = b;
-  if (e.target && (t = e.params, r = e.defer, n = e.meta, o = "page" in e ? e.page : o, e.stack && (s = e.stack), a = ae(e) || a, e = e.target), a && b && a !== b && (b = null), Array.isArray(e))
-    for (let i = 0; i < e.length; i++)
-      H("pure", o, x(e[i]), s, t[i], a, n);
+  let n, o = D, i = null, a = b;
+  if (e.target && (t = e.params, r = e.defer, n = e.meta, o = "page" in e ? e.page : o, e.stack && (i = e.stack), a = ae(e) || a, e = e.target), a && b && a !== b && (b = null), Array.isArray(e))
+    for (let s = 0; s < e.length; s++)
+      H("pure", o, x(e[s]), i, t[s], a, n);
   else
-    H("pure", o, x(e), s, t, a, n);
+    H("pure", o, x(e), i, t, a, n);
   if (r && !ie)
     return;
-  let p, g, c, S, u, d, f = { isRoot: ie, currentPage: D, scope: b, isWatch: _e, isPure: se };
+  let p, g, c, S, u, d, f = { isRoot: ie, currentPage: D, scope: b, isWatch: we, isPure: se };
   ie = 0;
   e:
     for (; S = Tt(); ) {
-      let { idx: i, stack: l, type: v } = S;
+      let { idx: s, stack: l, type: v } = S;
       c = l.node, D = u = l.page, b = ae(l), u ? d = u.reg : b && (d = b.reg);
-      let B = !!u, A = !!b, w = { fail: 0, scope: c.scope };
+      let B = !!u, A = !!b, _ = { fail: 0, scope: c.scope };
       p = g = 0;
-      for (let h = i; h < c.seq.length && !p; h++) {
-        let _ = c.seq[h];
-        if (_.order) {
-          let { priority: m, barrierID: y } = _.order, E = y ? u ? `${u.fullID}_${y}` : y : 0;
-          if (h !== i || v !== m) {
+      for (let h = s; h < c.seq.length && !p; h++) {
+        let w = c.seq[h];
+        if (w.order) {
+          let { priority: m, barrierID: y } = w.order, E = y ? u ? `${u.fullID}_${y}` : y : 0;
+          if (h !== s || v !== m) {
             y ? ye.has(E) || (ye.add(E), Ce(h, l, m, y)) : Ce(h, l, m);
             continue e;
           }
           y && ye.delete(E);
         }
-        switch (_.type) {
+        switch (w.type) {
           case "mov": {
-            let y, E = _.data;
+            let y, E = w.data;
             switch (E.from) {
               case X:
                 y = J(l);
@@ -145,35 +145,35 @@ function et(e, t, r) {
             break;
           }
           case "compute":
-            let m = _.data;
+            let m = w.data;
             if (m.fn) {
-              _e = C(c, "op") === "watch", se = m.pure;
-              let y = m.safe ? (0, m.fn)(J(l), w.scope, l) : $t(w, m.fn, l);
-              m.filter ? g = !y : l.value = y, _e = f.isWatch, se = f.isPure;
+              we = C(c, "op") === "watch", se = m.pure;
+              let y = m.safe ? (0, m.fn)(J(l), _.scope, l) : $t(_, m.fn, l);
+              m.filter ? g = !y : l.value = y, we = f.isWatch, se = f.isPure;
             }
         }
-        p = w.fail || g;
+        p = _.fail || g;
       }
       if (!p) {
-        let h = J(l), _ = ae(l);
+        let h = J(l), w = ae(l);
         if (L(c.next, (m) => {
-          H("child", u, m, l, h, _);
-        }), _) {
-          C(c, "needFxCounter") && H("child", u, _.fxCount, l, h, _), C(c, "storeChange") && H("child", u, _.storeChange, l, h, _), C(c, "warnSerialize") && H("child", u, _.warnSerializeNode, l, h, _);
-          let m = _.additionalLinks[c.id];
+          H("child", u, m, l, h, w);
+        }), w) {
+          C(c, "needFxCounter") && H("child", u, w.fxCount, l, h, w), C(c, "storeChange") && H("child", u, w.storeChange, l, h, w), C(c, "warnSerialize") && H("child", u, w.warnSerializeNode, l, h, w);
+          let m = w.additionalLinks[c.id];
           m && L(m, (y) => {
-            H("child", u, y, l, h, _);
+            H("child", u, y, l, h, w);
           });
         }
       }
     }
   ie = f.isRoot, D = f.currentPage, b = ae(f);
 }
-function _t(e, t) {
+function wt(e, t) {
   let r, n, o = e;
   if (t) {
-    let s = Et(t);
-    e.length === 0 ? (r = s.path, n = s.fullName) : (r = s.path.concat([e]), n = s.fullName.length === 0 ? e : s.fullName + "/" + e);
+    let i = Et(t);
+    e.length === 0 ? (r = i.path, n = i.fullName) : (r = i.path.concat([e]), n = i.fullName.length === 0 ? e : i.fullName + "/" + e);
   } else
     r = e.length === 0 ? [] : [e], n = e;
   return { shortName: o, fullName: n, path: r };
@@ -193,13 +193,13 @@ function R(e, t) {
       for (f = D; f && f.template !== c; )
         f = W(f);
     Fe(f);
-    let i = g.create(S, u);
-    return Fe(d), i;
-  })(n, o, a, p) : n.create(a, p)), o = at(), s = Object.assign(n, { graphite: P({ meta: ft("event", n, r), regional: 1 }), create: (a) => (et({ target: n, params: a, scope: b }), a), watch: (a) => ct(n, a), map: (a) => we(n, Q, a, [N()]), filter: (a) => we(n, "filter", a.fn ? a : a.fn, [N(Ve, 1)]), filterMap: (a) => we(n, "filterMap", a, [N(), Be((p) => !I(p), 1)]), prepend(a) {
+    let s = g.create(S, u);
+    return Fe(d), s;
+  })(n, o, a, p) : n.create(a, p)), o = at(), i = Object.assign(n, { graphite: P({ meta: ft("event", n, r), regional: 1 }), create: (a) => (et({ target: n, params: a, scope: b }), a), watch: (a) => ct(n, a), map: (a) => _e(n, Q, a, [N()]), filter: (a) => _e(n, "filter", a.fn ? a : a.fn, [N(Ve, 1)]), filterMap: (a) => _e(n, "filterMap", a, [N(), Be((p) => !I(p), 1)]), prepend(a) {
     let p = R("* → " + n.shortName, { parent: W(n) });
     return Y("eventPrepend", x(p)), Ie(p, n, [N()], "prepend", a), zt(n, p), p;
   } });
-  return r != null && r.domain && r.domain.hooks.event(s), s;
+  return r != null && r.domain && r.domain.hooks.event(i), i;
 }
 function Ne(e, t, r, n) {
   return Rt(r, t, "first argument"), j(T(n), "second argument should be a function"), Z(!C(e, "derived"), `${t} in derived store`, `${t} in store created via createStore`), L(Array.isArray(r) ? r : [r], (o) => {
@@ -209,37 +209,37 @@ function Ne(e, t, r, n) {
 function tt(e, t) {
   let r = te(t), n = Ht(e), o = R({ named: "updates", derived: 1 });
   Y("storeBase", n);
-  let s = n.id, a = { subscribers: /* @__PURE__ */ new Map(), updates: o, defaultState: e, stateRef: n, getState() {
-    let i, l = n;
+  let i = n.id, a = { subscribers: /* @__PURE__ */ new Map(), updates: o, defaultState: e, stateRef: n, getState() {
+    let s, l = n;
     if (D) {
       let v = D;
-      for (; v && !v.reg[s]; )
+      for (; v && !v.reg[i]; )
         v = W(v);
-      v && (i = v);
+      v && (s = v);
     }
-    return !i && b && (G(b, n, 1), i = b), i && (l = i.reg[s]), st(l);
-  }, setState: (i) => et({ target: a, params: i, defer: 1, scope: b }), reset: (...i) => (L(i, (l) => Ne(a, ".reset", l, () => a.defaultState)), a), on: (i, l) => Ne(a, ".on", i, l), off(i) {
-    let l = ue(a).get(i);
-    return l && (l(), ue(a).delete(i)), a;
-  }, map(i, l) {
+    return !s && b && (G(b, n, 1), s = b), s && (l = s.reg[i]), st(l);
+  }, setState: (s) => et({ target: a, params: s, defer: 1, scope: b }), reset: (...s) => (L(s, (l) => Ne(a, ".reset", l, () => a.defaultState)), a), on: (s, l) => Ne(a, ".on", s, l), off(s) {
+    let l = ue(a).get(s);
+    return l && (l(), ue(a).delete(s)), a;
+  }, map(s, l) {
     let v, B;
-    F(i) && (v = i, i = i.fn), Z(I(l), "second argument of store.map", "updateFilter");
+    F(s) && (v = s, s = s.fn), Z(I(l), "second argument of store.map", "updateFilter");
     let A = a.getState();
-    I(A) || (B = i(A, l));
-    let w = tt(B, { name: `${a.shortName} → *`, derived: 1, and: v }), h = dt(a, w, Q, We, i);
-    return Pt(le(w), { type: Q, fn: i, from: n }), le(w).noInit = 1, Y("storeMap", n, h), w;
-  }, watch(i, l) {
-    if (!l || !De(i)) {
-      let v = ct(a, i);
-      return Y("storeWatch", n, i) || i(a.getState()), v;
+    I(A) || (B = s(A, l));
+    let _ = tt(B, { name: `${a.shortName} → *`, derived: 1, and: v }), h = dt(a, _, Q, We, s);
+    return Pt(le(_), { type: Q, fn: s, from: n }), le(_).noInit = 1, Y("storeMap", n, h), _;
+  }, watch(s, l) {
+    if (!l || !De(s)) {
+      let v = ct(a, s);
+      return Y("storeWatch", n, s) || s(a.getState()), v;
     }
-    return j(T(l), "second argument should be a function"), i.watch((v) => l(a.getState(), v));
+    return j(T(l), "second argument should be a function"), s.watch((v) => l(a.getState(), v));
   } }, p = ft("store", a, r), g = a.defaultConfig.updateFilter;
-  a.graphite = P({ scope: { state: n, fn: g }, node: [Be((i, l, v) => (v.scope && !v.scope.reg[n.id] && (v.b = 1), i)), xt(n), Be((i, l, { a: v, b: B }) => !I(i) && (i !== v || B), 1), g && N(We, 1), de({ from: X, target: n })], child: o, meta: p, regional: 1 });
+  a.graphite = P({ scope: { state: n, fn: g }, node: [Be((s, l, v) => (v.scope && !v.scope.reg[n.id] && (v.b = 1), s)), xt(n), Be((s, l, { a: v, b: B }) => !I(s) && (s !== v || B), 1), g && N(We, 1), de({ from: X, target: n })], child: o, meta: p, regional: 1 });
   let c = C(a, "serialize"), S = C(a, "derived"), u = c === "ignore", d = !c || u ? 0 : c, f = C(a, "sid");
   return f && (u || $e(a, "storeChange", 1), n.sid = f, d && (n.meta = { ...n == null ? void 0 : n.meta, serialize: d })), f || u || S || $e(a, "warnSerialize", 1), j(S || !I(e), "current state can't be undefined, use null instead"), ot(a, [o]), r != null && r.domain && r.domain.hooks.store(a), S || (a.reinit = R(), a.reset(a.reinit)), a;
 }
-let wt = typeof Symbol < "u" && Symbol.observable || "@@observable", Q = "map", X = "stack", x = (e) => e.graphite || e, ce = (e) => e.family.owners, fe = (e) => e.family.links, le = (e) => e.stateRef, J = (e) => e.value, ue = (e) => e.subscribers, W = (e) => e.parent, ae = (e) => e.scope, C = (e, t) => x(e).meta[t], $e = (e, t, r) => x(e).meta[t] = r, Et = (e) => e.compositeName, De = (e) => (T(e) || F(e)) && "kind" in e;
+let _t = typeof Symbol < "u" && Symbol.observable || "@@observable", Q = "map", X = "stack", x = (e) => e.graphite || e, ce = (e) => e.family.owners, fe = (e) => e.family.links, le = (e) => e.stateRef, J = (e) => e.value, ue = (e) => e.subscribers, W = (e) => e.parent, ae = (e) => e.scope, C = (e, t) => x(e).meta[t], $e = (e, t, r) => x(e).meta[t] = r, Et = (e) => e.compositeName, De = (e) => (T(e) || F(e)) && "kind" in e;
 const ne = (e) => (t) => De(t) && t.kind === e;
 let Me = ne("store"), Ot = ne("event"), ze = ne("effect"), rt = ne("domain"), bt = ne("scope");
 var kt = { __proto__: null, unit: De, store: Me, event: Ot, effect: ze, domain: rt, scope: bt, attached: (e) => ze(e) && C(e, "attached") == 1 };
@@ -266,7 +266,7 @@ const it = (e, t, r, n) => {
   let o = { id: nt(), type: e, data: t };
   return r && (o.order = { priority: r }, n && (o.order.barrierID = ++Mt)), o;
 };
-let Mt = 0, de = ({ from: e = "store", store: t, target: r, to: n = r ? "store" : X, batch: o, priority: s }) => it("mov", { from: e, store: t, to: n, target: r }, s, o), ee = ({ fn: e, batch: t, priority: r, safe: n = 0, filter: o = 0, pure: s = 0 }) => it("compute", { fn: e, safe: n, filter: o, pure: s }, r, t), He = ({ fn: e }) => ee({ fn: e, priority: "effect" }), Be = (e, t, r) => ee({ fn: e, safe: 1, filter: t, priority: r && "effect" }), xt = (e, t, r) => de({ store: e, to: t ? X : "a", priority: r && "sampler", batch: 1 }), N = (e = Ve, t) => ee({ fn: e, pure: 1, filter: t }), Vt = { mov: de, compute: ee, filter: ({ fn: e, pure: t }) => ee({ fn: e, filter: 1, pure: t }), run: He }, Ht = (e) => ({ id: nt(), current: e }), st = ({ current: e }) => e, Pt = (e, t) => {
+let Mt = 0, de = ({ from: e = "store", store: t, target: r, to: n = r ? "store" : X, batch: o, priority: i }) => it("mov", { from: e, store: t, to: n, target: r }, i, o), ee = ({ fn: e, batch: t, priority: r, safe: n = 0, filter: o = 0, pure: i = 0 }) => it("compute", { fn: e, safe: n, filter: o, pure: i }, r, t), He = ({ fn: e }) => ee({ fn: e, priority: "effect" }), Be = (e, t, r) => ee({ fn: e, safe: 1, filter: t, priority: r && "effect" }), xt = (e, t, r) => de({ store: e, to: t ? X : "a", priority: r && "sampler", batch: 1 }), N = (e = Ve, t) => ee({ fn: e, pure: 1, filter: t }), Vt = { mov: de, compute: ee, filter: ({ fn: e, pure: t }) => ee({ fn: e, filter: 1, pure: t }), run: He }, Ht = (e) => ({ id: nt(), current: e }), st = ({ current: e }) => e, Pt = (e, t) => {
   e.before || (e.before = []), V(e.before, t);
 }, $ = null;
 const Pe = (e, t) => {
@@ -294,9 +294,9 @@ const Tt = () => {
       return t.first = r.r, t.size -= 1, r.v;
     }
   }
-}, H = (e, t, r, n, o, s, a) => Ce(0, { a: null, b: null, node: r, parent: n, value: o, page: t, scope: s, meta: a }, e), Ce = (e, t, r, n = 0) => {
-  let o = Ae(r), s = Te[o], a = { v: { idx: e, stack: t, type: r, id: n }, l: null, r: null };
-  o === 3 || o === 4 ? $ = Pe($, a) : (s.size === 0 ? s.first = a : s.last.r = a, s.last = a), s.size += 1;
+}, H = (e, t, r, n, o, i, a) => Ce(0, { a: null, b: null, node: r, parent: n, value: o, page: t, scope: i, meta: a }, e), Ce = (e, t, r, n = 0) => {
+  let o = Ae(r), i = Te[o], a = { v: { idx: e, stack: t, type: r, id: n }, l: null, r: null };
+  o === 3 || o === 4 ? $ = Pe($, a) : (i.size === 0 ? i.first = a : i.last.r = a, i.last = a), i.size += 1;
 }, Ae = (e) => {
   switch (e) {
     case "child":
@@ -315,7 +315,7 @@ const Tt = () => {
       return -1;
   }
 }, ye = /* @__PURE__ */ new Set();
-let b, ie = 1, _e = 0, se = 0, D = null, Fe = (e) => {
+let b, ie = 1, we = 0, se = 0, D = null, Fe = (e) => {
   D = e;
 };
 const lt = (e, t) => {
@@ -328,13 +328,13 @@ const lt = (e, t) => {
   return null;
 };
 let It = (e, t, r, n, o) => {
-  let s = lt(e, n.id);
-  return s ? s.reg[n.id] : t ? (G(t, n, o), t.reg[n.id]) : n;
+  let i = lt(e, n.id);
+  return i ? i.reg[n.id] : t ? (G(t, n, o), t.reg[n.id]) : n;
 };
 const Nt = (e) => e;
 let G = (e, t, r, n, o) => {
-  var s;
-  let a = e.reg, p = t.sid, g = t == null || (s = t.meta) === null || s === void 0 ? void 0 : s.serialize;
+  var i;
+  let a = e.reg, p = t.sid, g = t == null || (i = t.meta) === null || i === void 0 ? void 0 : i.serialize;
   if (a[t.id])
     return;
   let c = { id: t.id, current: t.current, meta: t.meta };
@@ -348,8 +348,8 @@ let G = (e, t, r, n, o) => {
           let f = d.from;
           if (f || d.fn) {
             f && G(e, f, r, n);
-            let i = f && a[f.id].current;
-            u && (c.current = d.fn ? d.fn(i) : i);
+            let s = f && a[f.id].current;
+            u && (c.current = d.fn ? d.fn(s) : s);
           }
           break;
         }
@@ -397,19 +397,19 @@ let Re = (e, { deep: t } = {}) => {
 }, Ie = (e, t, r, n, o) => P({ node: r, parent: e, child: t, scope: { fn: o }, meta: { op: n }, family: { owners: [e, t], links: t }, regional: 1 }), ct = (e, t) => (j(T(t), ".watch argument should be a function"), ut(P({ scope: { fn: t }, node: [He({ fn: Ve })], parent: e, meta: { op: "watch" }, family: { owners: e }, regional: 1 }))), zt = (e, t, r = "event") => {
   W(e) && W(e).hooks[r](t);
 }, ft = (e, t, r) => {
-  let n = te(r), o = e === "domain", s = Bt(), { sid: a = null, named: p = null, domain: g = null, parent: c = g } = n, S = p || n.name || (o ? "" : s), u = _t(S, c), d = { op: t.kind = e, name: t.shortName = S, sid: t.sid = At(a), named: p, unitId: t.id = s, serialize: n.serialize, derived: n.derived, config: n };
-  return t.parent = c, t.compositeName = u, t.defaultConfig = n, t.thru = (f) => (Z(0, "thru", "js pipe"), f(t)), t.getType = () => u.fullName, !o && (t.subscribe = (f) => (Lt(f), t.watch(T(f) ? f : (i) => f.next && f.next(i))), t[wt] = () => t), d;
+  let n = te(r), o = e === "domain", i = Bt(), { sid: a = null, named: p = null, domain: g = null, parent: c = g } = n, S = p || n.name || (o ? "" : i), u = wt(S, c), d = { op: t.kind = e, name: t.shortName = S, sid: t.sid = At(a), named: p, unitId: t.id = i, serialize: n.serialize, derived: n.derived, config: n };
+  return t.parent = c, t.compositeName = u, t.defaultConfig = n, t.thru = (f) => (Z(0, "thru", "js pipe"), f(t)), t.getType = () => u.fullName, !o && (t.subscribe = (f) => (Lt(f), t.watch(T(f) ? f : (s) => f.next && f.next(s))), t[_t] = () => t), d;
 };
-const we = (e, t, r, n) => {
+const _e = (e, t, r, n) => {
   let o;
   F(r) && (o = r, r = r.fn);
-  let s = R({ name: `${e.shortName} → *`, derived: 1, and: o });
-  return Ie(e, s, n, t, r), s;
+  let i = R({ name: `${e.shortName} → *`, derived: 1, and: o });
+  return Ie(e, i, n, t, r), i;
 }, dt = (e, t, r, n, o) => {
-  let s = le(t), a = de({ store: s, to: "a", priority: "read" });
+  let i = le(t), a = de({ store: i, to: "a", priority: "read" });
   r === Q && (a.data.softRead = 1);
   let p = [a, N(n)];
-  return Y("storeOnMap", s, p, Me(e) && le(e)), Ie(e, t, p, r, o);
+  return Y("storeOnMap", i, p, Me(e) && le(e)), Ie(e, t, p, r, o);
 };
 P({ node: [He({ fn: ({ fn: e, value: t }) => e(t) })], meta: { op: "fx", fx: "sidechain" } });
 const jt = R(), Wt = R(), pt = R(), vt = R(), ht = R(), mt = R(), Gt = R(), Ft = tt({
@@ -478,10 +478,10 @@ function Yt() {
   function t(u, d) {
     return u === d && (u !== 0 || 1 / u === 1 / d) || u !== u && d !== d;
   }
-  var r = typeof Object.is == "function" ? Object.is : t, n = e.useState, o = e.useEffect, s = e.useLayoutEffect, a = e.useDebugValue;
+  var r = typeof Object.is == "function" ? Object.is : t, n = e.useState, o = e.useEffect, i = e.useLayoutEffect, a = e.useDebugValue;
   function p(u, d) {
-    var f = d(), i = n({ inst: { value: f, getSnapshot: d } }), l = i[0].inst, v = i[1];
-    return s(function() {
+    var f = d(), s = n({ inst: { value: f, getSnapshot: d } }), l = s[0].inst, v = s[1];
+    return i(function() {
       l.value = f, l.getSnapshot = d, g(l) && v({ inst: l });
     }, [u, f, d]), o(function() {
       return g(l) && v({ inst: l }), u(function() {
@@ -520,33 +520,33 @@ function Jt() {
   return Ye || (Ye = 1, process.env.NODE_ENV !== "production" && function() {
     typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
     var e = M, t = e.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
-    function r(w) {
+    function r(_) {
       {
-        for (var h = arguments.length, _ = new Array(h > 1 ? h - 1 : 0), m = 1; m < h; m++)
-          _[m - 1] = arguments[m];
-        n("error", w, _);
+        for (var h = arguments.length, w = new Array(h > 1 ? h - 1 : 0), m = 1; m < h; m++)
+          w[m - 1] = arguments[m];
+        n("error", _, w);
       }
     }
-    function n(w, h, _) {
+    function n(_, h, w) {
       {
         var m = t.ReactDebugCurrentFrame, y = m.getStackAddendum();
-        y !== "" && (h += "%s", _ = _.concat([y]));
-        var E = _.map(function(k) {
+        y !== "" && (h += "%s", w = w.concat([y]));
+        var E = w.map(function(k) {
           return String(k);
         });
-        E.unshift("Warning: " + h), Function.prototype.apply.call(console[w], console, E);
+        E.unshift("Warning: " + h), Function.prototype.apply.call(console[_], console, E);
       }
     }
-    function o(w, h) {
-      return w === h && (w !== 0 || 1 / w === 1 / h) || w !== w && h !== h;
+    function o(_, h) {
+      return _ === h && (_ !== 0 || 1 / _ === 1 / h) || _ !== _ && h !== h;
     }
-    var s = typeof Object.is == "function" ? Object.is : o, a = e.useState, p = e.useEffect, g = e.useLayoutEffect, c = e.useDebugValue, S = !1, u = !1;
-    function d(w, h, _) {
+    var i = typeof Object.is == "function" ? Object.is : o, a = e.useState, p = e.useEffect, g = e.useLayoutEffect, c = e.useDebugValue, S = !1, u = !1;
+    function d(_, h, w) {
       S || e.startTransition !== void 0 && (S = !0, r("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."));
       var m = h();
       if (!u) {
         var y = h();
-        s(m, y) || (r("The result of getSnapshot should be cached to avoid an infinite loop"), u = !0);
+        i(m, y) || (r("The result of getSnapshot should be cached to avoid an infinite loop"), u = !0);
       }
       var E = a({
         inst: {
@@ -558,7 +558,7 @@ function Jt() {
         k.value = m, k.getSnapshot = h, f(k) && K({
           inst: k
         });
-      }, [w, m, h]), p(function() {
+      }, [_, m, h]), p(function() {
         f(k) && K({
           inst: k
         });
@@ -567,22 +567,22 @@ function Jt() {
             inst: k
           });
         };
-        return w(pe);
-      }, [w]), c(m), m;
+        return _(pe);
+      }, [_]), c(m), m;
     }
-    function f(w) {
-      var h = w.getSnapshot, _ = w.value;
+    function f(_) {
+      var h = _.getSnapshot, w = _.value;
       try {
         var m = h();
-        return !s(_, m);
+        return !i(w, m);
       } catch {
         return !0;
       }
     }
-    function i(w, h, _) {
+    function s(_, h, w) {
       return h();
     }
-    var l = typeof window < "u" && typeof window.document < "u" && typeof window.document.createElement < "u", v = !l, B = v ? i : d, A = e.useSyncExternalStore !== void 0 ? e.useSyncExternalStore : B;
+    var l = typeof window < "u" && typeof window.document < "u" && typeof window.document.createElement < "u", v = !l, B = v ? s : d, A = e.useSyncExternalStore !== void 0 ? e.useSyncExternalStore : B;
     be.useSyncExternalStore = A, typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop == "function" && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
   }()), be;
 }
@@ -608,37 +608,37 @@ function Xt() {
   function r(c, S) {
     return c === S && (c !== 0 || 1 / c === 1 / S) || c !== c && S !== S;
   }
-  var n = typeof Object.is == "function" ? Object.is : r, o = t.useSyncExternalStore, s = e.useRef, a = e.useEffect, p = e.useMemo, g = e.useDebugValue;
+  var n = typeof Object.is == "function" ? Object.is : r, o = t.useSyncExternalStore, i = e.useRef, a = e.useEffect, p = e.useMemo, g = e.useDebugValue;
   return Ee.useSyncExternalStoreWithSelector = function(c, S, u, d, f) {
-    var i = s(null);
-    if (i.current === null) {
+    var s = i(null);
+    if (s.current === null) {
       var l = { hasValue: !1, value: null };
-      i.current = l;
+      s.current = l;
     } else
-      l = i.current;
-    i = p(function() {
+      l = s.current;
+    s = p(function() {
       function B(m) {
         if (!A) {
-          if (A = !0, w = m, m = d(m), f !== void 0 && l.hasValue) {
+          if (A = !0, _ = m, m = d(m), f !== void 0 && l.hasValue) {
             var y = l.value;
             if (f(y, m))
               return h = y;
           }
           return h = m;
         }
-        if (y = h, n(w, m))
+        if (y = h, n(_, m))
           return y;
         var E = d(m);
-        return f !== void 0 && f(y, E) ? y : (w = m, h = E);
+        return f !== void 0 && f(y, E) ? y : (_ = m, h = E);
       }
-      var A = !1, w, h, _ = u === void 0 ? null : u;
+      var A = !1, _, h, w = u === void 0 ? null : u;
       return [function() {
         return B(S());
-      }, _ === null ? void 0 : function() {
-        return B(_());
+      }, w === null ? void 0 : function() {
+        return B(w());
       }];
     }, [S, u, d, f]);
-    var v = o(c, i[0], i[1]);
+    var v = o(c, s[0], s[1]);
     return a(function() {
       l.hasValue = !0, l.value = v;
     }, [v]), g(v), v;
@@ -662,21 +662,21 @@ function Zt() {
     function r(S, u) {
       return S === u && (S !== 0 || 1 / S === 1 / u) || S !== S && u !== u;
     }
-    var n = typeof Object.is == "function" ? Object.is : r, o = t.useSyncExternalStore, s = e.useRef, a = e.useEffect, p = e.useMemo, g = e.useDebugValue;
-    function c(S, u, d, f, i) {
-      var l = s(null), v;
+    var n = typeof Object.is == "function" ? Object.is : r, o = t.useSyncExternalStore, i = e.useRef, a = e.useEffect, p = e.useMemo, g = e.useDebugValue;
+    function c(S, u, d, f, s) {
+      var l = i(null), v;
       l.current === null ? (v = {
         hasValue: !1,
         value: null
       }, l.current = v) : v = l.current;
       var B = p(function() {
-        var _ = !1, m, y, E = function(U) {
-          if (!_) {
-            _ = !0, m = U;
+        var w = !1, m, y, E = function(U) {
+          if (!w) {
+            w = !0, m = U;
             var ve = f(U);
-            if (i !== void 0 && v.hasValue) {
+            if (s !== void 0 && v.hasValue) {
               var he = v.value;
-              if (i(he, ve))
+              if (s(he, ve))
                 return y = he, he;
             }
             return y = ve, ve;
@@ -685,14 +685,14 @@ function Zt() {
           if (n(gt, U))
             return me;
           var Se = f(U);
-          return i !== void 0 && i(me, Se) ? me : (m = U, y = Se, Se);
+          return s !== void 0 && s(me, Se) ? me : (m = U, y = Se, Se);
         }, k = d === void 0 ? null : d, K = function() {
           return E(u());
         }, pe = k === null ? void 0 : function() {
           return E(k());
         };
         return [K, pe];
-      }, [u, d, f, i]), A = B[0], w = B[1], h = o(S, A, w);
+      }, [u, d, f, s]), A = B[0], _ = B[1], h = o(S, A, _);
       return a(function() {
         v.hasValue = !0, v.value = h;
       }, [h]), g(h), h;
@@ -704,18 +704,18 @@ function Zt() {
   process.env.NODE_ENV === "production" ? e.exports = Xt() : e.exports = Zt();
 })(Ut);
 function er(e, t, r, n) {
-  let o = [Vt.run({ fn: (s) => t(s) })];
+  let o = [Vt.run({ fn: (i) => t(i) })];
   if (n && o.unshift(n), r) {
-    let s = P({ node: o }), a = e.graphite.id, p = r.additionalLinks, g = p[a] || [];
-    return p[a] = g, g.push(s), () => {
-      let c = g.indexOf(s);
-      c !== -1 && g.splice(c, 1), Re(s);
+    let i = P({ node: o }), a = e.graphite.id, p = r.additionalLinks, g = p[a] || [];
+    return p[a] = g, g.push(i), () => {
+      let c = g.indexOf(i);
+      c !== -1 && g.splice(c, 1), Re(i);
     };
   }
   {
-    let s = P({ node: o, parent: [e], family: { owners: e } });
+    let i = P({ node: o, parent: [e], family: { owners: e } });
     return () => {
-      Re(s);
+      Re(i);
     };
   }
 }
@@ -745,7 +745,7 @@ const { useSyncExternalStore: ar } = Qt, or = (e, t) => t ? t.getState(e) : e.ge
 }, Xe = (e, t, r, n) => {
   Ze(() => (O.addEventListener(e, t, r), () => O.removeEventListener(r)), [...n]);
 }, mr = (e, ...t) => {
-  const { activeView: r, activePanel: n, activeModal: o, activePopout: s, isRouteInit: a } = lr();
+  const { activeView: r, activePanel: n, activeModal: o, activePopout: i, isRouteInit: a } = lr();
   Xe("init", (p) => {
     console.log("[blum]: initialized", p), a || (O.setDefaultBackHandlerOptions(), O.historyPush(e));
   }, 1, [a]), sr("popstate", async () => {
@@ -757,13 +757,13 @@ const { useSyncExternalStore: ar } = Qt, or = (e, t) => t ? t.getState(e) : e.ge
         modal: void 0,
         popout: void 0
       };
-      console.log("prevRoutes", g, c, S, u), console.log("storeRoutes", r, n, o, s);
+      console.log("prevRoutes", g, c, S, u), console.log("storeRoutes", r, n, o, i);
       for (const d in t)
         if (!await t[d]({
           view: r,
           panel: n,
           modal: o,
-          popout: s
+          popout: i
         }, { view: g, panel: c, modal: S, popout: u }))
           return;
       O.isDispatchChangeStateEventAfterMiddleware && O.dispatchChangeStateEvent();
@@ -775,9 +775,21 @@ const { useSyncExternalStore: ar } = Qt, or = (e, t) => t ? t.getState(e) : e.ge
       g && c && pt({ view: g, panel: c }), vt(S), ht(u), a || mt();
     }
   }, 2, [a]);
-}, lr = () => nr(Ft), Sr = (e) => e, gr = (e, t) => ur(e, (r, n) => {
-  t && t(r, n), O.historyPush(r);
-}), ur = (e, t) => (r, n) => ["view", "panel", "modal", "popout"].some((s) => r[s] === e && r[s] !== n[s]) && O.isBackFromBrowser ? (t && t(r, n), !1) : !0;
+}, lr = () => nr(Ft), Sr = (e) => e, gr = (e, t) => ur(e, async (r, n) => {
+  let o;
+  if (t && (o = await t(r, n)), O.historyPush(r), typeof o == "boolean")
+    return o;
+}), ur = (e, t) => async (r, n) => {
+  if (["view", "panel", "modal", "popout"].some((i) => r[i] === e && r[i] !== n[i]) && O.isBackFromBrowser) {
+    if (t) {
+      const i = await t(r, n);
+      if (typeof i == "boolean")
+        return i;
+    }
+    return !1;
+  }
+  return !0;
+};
 export {
   vt as _setActiveModal,
   Wt as _setActivePanel,

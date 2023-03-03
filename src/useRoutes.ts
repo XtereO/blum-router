@@ -98,12 +98,11 @@ export const useInitRouter = (
       }
 
       await changeRoutes();
+      setDefaultBackHandlerOptions();
 
       if (afterBackHandledCallback) {
         afterBackHandledCallback();
       }
-
-      setDefaultBackHandlerOptions();
     }
   });
   useBlumEventListener(

@@ -777,7 +777,7 @@ const { useSyncExternalStore: ir } = Zt, sr = (e, t) => t ? t.getState(e) : e.ge
           return;
       y && D.dispatchChangeStateEvent();
     };
-    a && (f && f(), await c(), u && u(), De());
+    a && (f && f(), await c(), De(), u && u());
   }), et("changestate", (c) => {
     if (console.log("[blum]: state changed", c), c) {
       const { view: i, panel: s, modal: d, popout: O } = c;

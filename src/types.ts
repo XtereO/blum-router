@@ -17,9 +17,19 @@ export type SetRoutes = {
   panel?: string;
   modal?: string;
   popout?: string;
-}
+};
 
 export type RouteMiddleware = (
   storeRoutes: Routes,
-  prevRoutes: Routes
+  prevRoutes: Routes,
+  options: BackHandlerOptions
 ) => boolean | Promise<boolean>;
+
+export type BackHandlerOptions = {
+  beforeBackHandledCallback?: (() => void) | null;
+  afterBackHandledCallback?: (() => void) | null;
+  isDispatchChangeStateEventBeforeMiddleware?: boolean;
+  isDispatchChangeStateEventAfterMiddleware?: boolean;
+  isBackFromBrowser?: boolean;
+  isBackHandled?: boolean;
+};

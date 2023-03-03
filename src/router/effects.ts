@@ -1,14 +1,16 @@
-import { BackHandlerOptions, blumRouter } from "src/blum-router";
+import { blumRouter } from "src/blum-router";
+import { BackHandlerOptions } from "src/types";
+import { setBackHandlerOptions } from "./event";
 
 export const back = (options?: BackHandlerOptions) => {
   if (options) {
-    blumRouter.setBackHandlerOptions(options);
+    setBackHandlerOptions({ ...options, isBackHandled: false });
   }
   if (
     !options ||
     !(options as BackHandlerOptions).hasOwnProperty("isBackFromBrowser")
   ) {
-    blumRouter.setBackHandlerOptions({ isBackFromBrowser: false });
+    setBackHandlerOptions({ isBackFromBrowser: false });
   }
   window.history.back();
 };

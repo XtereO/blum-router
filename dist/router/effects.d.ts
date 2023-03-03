@@ -1,4 +1,4 @@
-import { BackHandlerOptions } from "src/blum-router";
+import { BackHandlerOptions } from "src/types";
 export declare const back: (options?: BackHandlerOptions) => void;
 export declare const setActiveViewPanel: (routes: {
     view: string;

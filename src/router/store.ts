@@ -2,6 +2,8 @@ import { createStore } from "effector";
 import {
   initRoute,
   setBackHandled,
+  setBackHandlerOptions,
+  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePanel,
   _setActivePopout,
@@ -16,6 +18,11 @@ type Store = {
   activePopout: string | null;
   isRouteInit: boolean;
   isBackHandled: boolean;
+  isDispatchChangeStateEventBeforeMiddleware: boolean;
+  isDispatchChangeStateEventAfterMiddleware: boolean;
+  beforeBackHandledCallback: (() => void) | null;
+  isBackFromBrowser: boolean;
+  afterBackHandledCallback: (() => void) | null;
 };
 
 export const $router = createStore<Store>({
@@ -25,7 +32,48 @@ export const $router = createStore<Store>({
   activePopout: null,
   isRouteInit: false,
   isBackHandled: true,
+  isDispatchChangeStateEventBeforeMiddleware: false,
+  isDispatchChangeStateEventAfterMiddleware: true,
+  beforeBackHandledCallback: null,
+  afterBackHandledCallback: null,
+  isBackFromBrowser: true,
 })
+  .on(setDefaultBackHandlerOptions, (state) => ({
+    ...state,
+    isDispatchChangeStateEventBeforeMiddleware: false,
+    isDispatchChangeStateEventAfterMiddleware: true,
+    beforeBackHandledCallback: null,
+    afterBackHandledCallback: null,
+    isBackFromBrowser: true,
+    isBackHandled: true,
+  }))
+  .on(setBackHandlerOptions, (state, options) => ({
+    ...state,
+    isBackHandled: options.hasOwnProperty("isBackHandled")
+      ? options.isBackHandled!
+      : state.isBackHandled,
+    isBackFromBrowser: options.hasOwnProperty("isBackFromBrowser")
+      ? options.isBackFromBrowser!
+      : state.isBackFromBrowser,
+    isDispatchChangeStateEventBeforeMiddleware: options.hasOwnProperty(
+      "isDispatchChangeStateEventBeforeMiddleware"
+    )
+      ? options.isDispatchChangeStateEventBeforeMiddleware!
+      : state.isDispatchChangeStateEventBeforeMiddleware,
+    isDispatchChangeStateEventAfterMiddleware: options.hasOwnProperty(
+      "isDispatchChangeStateEventAfterMiddleware"
+    )
+      ? options.isDispatchChangeStateEventAfterMiddleware!
+      : state.isDispatchChangeStateEventAfterMiddleware,
+    beforeBackHandledCallback: options.hasOwnProperty(
+      "beforeBackHandledCallback"
+    )
+      ? options.beforeBackHandledCallback!
+      : state.beforeBackHandledCallback,
+    afterBackHandledCallback: options.hasOwnProperty("afterBackHandledCallback")
+      ? options.afterBackHandledCallback!
+      : state.afterBackHandledCallback,
+  }))
   .on(_setActiveView, (state, activeView) => ({
     ...state,
     activeView,

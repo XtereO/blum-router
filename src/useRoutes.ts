@@ -3,25 +3,42 @@ import { blumRouter } from "./blum-router";
 import {
   $router,
   initRoute,
+  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePopout,
   _setActiveViewPanel,
 } from "./router";
-import { InitRouteOptions, RouteMiddleware, Routes } from "./types";
+import {
+  BackHandlerOptions,
+  InitRouteOptions,
+  RouteMiddleware,
+  Routes,
+} from "./types";
 import { useBlumEventListener, useEventListener } from "./useEventListener";
 
 export const useInitRouter = (
   options: InitRouteOptions,
   ...middlewares: RouteMiddleware[]
 ) => {
-  const { activeView, activePanel, activeModal, activePopout, isRouteInit } =
-    useRouter();
+  const {
+    activeView,
+    activePanel,
+    activeModal,
+    activePopout,
+    isRouteInit,
+    isDispatchChangeStateEventBeforeMiddleware,
+    isDispatchChangeStateEventAfterMiddleware,
+    isBackHandled,
+    isBackFromBrowser,
+    afterBackHandledCallback,
+    beforeBackHandledCallback,
+  } = useRouter();
   useBlumEventListener(
     "init",
     (payload) => {
       console.log("[blum]: initialized", payload);
       if (!isRouteInit) {
-        blumRouter.setDefaultBackHandlerOptions();
+        setDefaultBackHandlerOptions();
         blumRouter.historyPush(options);
       }
     },
@@ -31,7 +48,7 @@ export const useInitRouter = (
 
   useEventListener("popstate", async () => {
     const changeRoutes = async () => {
-      if (blumRouter.isDispatchChangeStateEventBeforeMiddleware) {
+      if (isDispatchChangeStateEventBeforeMiddleware) {
         blumRouter.dispatchChangeStateEvent();
       }
       const { view, panel, modal, popout } = window.history.state ?? {
@@ -57,29 +74,36 @@ export const useInitRouter = (
             modal: activeModal,
             popout: activePopout,
           },
-          { view, panel, modal, popout }
+          { view, panel, modal, popout },
+          {
+            isBackHandled,
+            isBackFromBrowser,
+            isDispatchChangeStateEventAfterMiddleware,
+            isDispatchChangeStateEventBeforeMiddleware,
+            beforeBackHandledCallback,
+            afterBackHandledCallback,
+          }
         );
         if (!res) {
           return;
         }
       }
-      if (blumRouter.isDispatchChangeStateEventAfterMiddleware) {
+      if (isDispatchChangeStateEventAfterMiddleware) {
         blumRouter.dispatchChangeStateEvent();
       }
     };
     if (isRouteInit) {
-      if (blumRouter.beforeBackHandledCallback) {
-        blumRouter.beforeBackHandledCallback();
+      if (beforeBackHandledCallback) {
+        beforeBackHandledCallback();
       }
 
       await changeRoutes();
-      blumRouter.isBackFromBrowser = true;
 
-      if (blumRouter.afterBackHandledCallback) {
-        blumRouter.afterBackHandledCallback();
+      if (afterBackHandledCallback) {
+        afterBackHandledCallback();
       }
 
-      blumRouter.setDefaultBackHandlerOptions();
+      setDefaultBackHandlerOptions();
     }
   });
   useBlumEventListener(
@@ -110,15 +134,16 @@ export const createDisableBackBrowserRouteMiddleware = (
   route: string,
   callback?: (
     storeRoutes: Routes,
-    prevRoutes: Routes
+    prevRoutes: Routes,
+    options: BackHandlerOptions
   ) => (void | boolean) | Promise<void | boolean>
 ) => {
   return createCatchBackBrowserRouteMiddleware(
     route,
-    async (storeRoutes, prevRoutes) => {
+    async (storeRoutes, prevRoutes, options) => {
       let res: boolean | void = undefined;
       if (callback) {
-        res = await callback(storeRoutes, prevRoutes);
+        res = await callback(storeRoutes, prevRoutes, options);
       }
       blumRouter.historyPush(storeRoutes);
       if (typeof res === "boolean") {
@@ -131,19 +156,24 @@ export const createCatchBackBrowserRouteMiddleware = (
   route: string,
   callback?: (
     storeRoutes: Routes,
-    prevRoutes: Routes
+    prevRoutes: Routes,
+    options: BackHandlerOptions
   ) => (void | boolean) | Promise<void | boolean>
 ) => {
-  return async (storeRoutes: Routes, prevRoutes: Routes) => {
+  return async (
+    storeRoutes: Routes,
+    prevRoutes: Routes,
+    options: BackHandlerOptions
+  ) => {
     const routes: (keyof Routes)[] = ["view", "panel", "modal", "popout"];
     if (
       routes.some(
         (r) => storeRoutes[r] === route && storeRoutes[r] !== prevRoutes[r]
       ) &&
-      blumRouter.isBackFromBrowser
+      options.isBackFromBrowser
     ) {
       if (callback) {
-        const res = await callback(storeRoutes, prevRoutes);
+        const res = await callback(storeRoutes, prevRoutes, options);
         if (typeof res === "boolean") {
           return res;
         }

@@ -1,47 +1,7 @@
 import { Routes } from "./types";
 
 export const blumRouter = {
-  isDispatchChangeStateEventBeforeMiddleware: false,
-  isDispatchChangeStateEventAfterMiddleware: true,
-  beforeBackHandledCallback: null as (() => void) | null,
-  isBackFromBrowser: true,
-  afterBackHandledCallback: null as (() => void) | null,
   subscribers: [] as Subscriber[],
-  setDefaultBackHandlerOptions() {
-    this.setBackHandlerOptions({
-      isDispatchChangeStateEventAfterMiddleware: true,
-      isDispatchChangeStateEventBeforeMiddleware: false,
-      beforeBackHandledCallback: null,
-      afterBackHandledCallback: null,
-      isBackFromBrowser: true,
-    });
-  },
-  setBackHandlerOptions(options: BackHandlerOptions) {
-    Object.keys(options).forEach((key: string) => {
-      if (options.hasOwnProperty(key)) {
-        //@ts-ignore
-        blumRouter[key as keyof BackHandlerOptions] =
-          options[key as keyof BackHandlerOptions];
-      }
-    });
-    if (options.hasOwnProperty("beforeBackHandledCallback")) {
-      blumRouter.beforeBackHandledCallback = options.beforeBackHandledCallback!;
-    }
-    if (options.hasOwnProperty("afterBackHandledCallback")) {
-      blumRouter.afterBackHandledCallback = options.afterBackHandledCallback!;
-    }
-    if (options.hasOwnProperty("isDispatchChangeStateEventAfterMiddleware")) {
-      blumRouter.isDispatchChangeStateEventAfterMiddleware =
-        options.isDispatchChangeStateEventAfterMiddleware!;
-    }
-    if (options.hasOwnProperty("isDispatchChangeStateEventBeforeMiddleware")) {
-      blumRouter.isDispatchChangeStateEventBeforeMiddleware =
-        options.isDispatchChangeStateEventBeforeMiddleware!;
-    }
-    if (options.hasOwnProperty("isBackFromBrowser")) {
-      blumRouter.isBackFromBrowser = options.isBackFromBrowser!;
-    }
-  },
   historyPush(routes: Partial<Routes>) {
     const { view, panel, modal, popout } = window.history.state ?? {
       view: undefined,
@@ -101,12 +61,4 @@ export type Subscriber = {
     payload: BlumRouterEventMap[K]
   ) => void;
   index: number;
-};
-
-export type BackHandlerOptions = {
-  beforeBackHandledCallback?: (() => void) | null;
-  afterBackHandledCallback?: (() => void) | null;
-  isDispatchChangeStateEventBeforeMiddleware?: boolean;
-  isDispatchChangeStateEventAfterMiddleware?: boolean;
-  isBackFromBrowser?: boolean;
 };

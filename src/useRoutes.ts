@@ -2,11 +2,11 @@ import { useStore } from "effector-react";
 import { blumRouter } from "./blum-router";
 import {
   $router,
-  initRoute,
-  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePopout,
   _setActiveViewPanel,
+  initRoute,
+  setDefaultBackHandlerOptions,
 } from "./router";
 import {
   BackHandlerOptions,
@@ -47,61 +47,54 @@ export const useInitRouter = (
   );
 
   useEventListener("popstate", async () => {
-    const changeRoutes = async () => {
+    const changeRoutes = async (storeRoutes: Routes, prevRoutes: Routes) => {
       if (isDispatchChangeStateEventBeforeMiddleware) {
         blumRouter.dispatchChangeStateEvent();
       }
-      const { view, panel, modal, popout } = window.history.state ?? {
-        view: undefined,
-        panel: undefined,
-        modal: undefined,
-        popout: undefined,
-      };
-      console.log("prevRoutes", view, panel, modal, popout);
-      console.log(
-        "storeRoutes",
-        activeView,
-        activePanel,
-        activeModal,
-        activePopout
-      );
 
       for (const i in middlewares) {
-        const res = await middlewares[i](
-          {
-            view: activeView,
-            panel: activePanel,
-            modal: activeModal,
-            popout: activePopout,
-          },
-          { view, panel, modal, popout },
-          {
-            isBackHandled,
-            isBackFromBrowser,
-            isDispatchChangeStateEventAfterMiddleware,
-            isDispatchChangeStateEventBeforeMiddleware,
-            beforeBackHandledCallback,
-            afterBackHandledCallback,
-          }
-        );
+        const res = await middlewares[i](storeRoutes, prevRoutes, {
+          isBackHandled,
+          isBackFromBrowser,
+          isDispatchChangeStateEventAfterMiddleware,
+          isDispatchChangeStateEventBeforeMiddleware,
+          beforeBackHandledCallback,
+          afterBackHandledCallback,
+        });
         if (!res) {
           return;
         }
       }
+
       if (isDispatchChangeStateEventAfterMiddleware) {
         blumRouter.dispatchChangeStateEvent();
       }
     };
     if (isRouteInit) {
+      const prevRoutes = window.history.state ?? {
+        view: undefined,
+        panel: undefined,
+        modal: undefined,
+        popout: undefined,
+      };
+      const storeRoutes = {
+        view: activeView,
+        panel: activePanel,
+        modal: activeModal,
+        popout: activePopout,
+      };
+      console.log("[blum]: prevRoutes", prevRoutes);
+      console.log("[blum]: storeRoutes", storeRoutes);
+
       if (beforeBackHandledCallback) {
-        beforeBackHandledCallback();
+        beforeBackHandledCallback(storeRoutes, prevRoutes);
       }
 
-      await changeRoutes();
+      await changeRoutes(storeRoutes, prevRoutes);
       setDefaultBackHandlerOptions();
 
       if (afterBackHandledCallback) {
-        afterBackHandledCallback();
+        afterBackHandledCallback(storeRoutes, prevRoutes);
       }
     }
   });

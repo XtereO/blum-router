@@ -1,14 +1,15 @@
 import { createStore } from "effector";
+import { Routes } from "src/types";
 import {
-  initRoute,
-  setBackHandled,
-  setBackHandlerOptions,
-  setDefaultBackHandlerOptions,
   _setActiveModal,
   _setActivePanel,
   _setActivePopout,
   _setActiveView,
   _setActiveViewPanel,
+  initRoute,
+  setBackHandled,
+  setBackHandlerOptions,
+  setDefaultBackHandlerOptions,
 } from "./event";
 
 type Store = {
@@ -20,9 +21,13 @@ type Store = {
   isBackHandled: boolean;
   isDispatchChangeStateEventBeforeMiddleware: boolean;
   isDispatchChangeStateEventAfterMiddleware: boolean;
-  beforeBackHandledCallback: (() => void) | null;
+  beforeBackHandledCallback:
+    | ((storeRoutes: Routes, prevRoutes: Routes) => void)
+    | null;
   isBackFromBrowser: boolean;
-  afterBackHandledCallback: (() => void) | null;
+  afterBackHandledCallback:
+    | ((storeRoutes: Routes, prevRoutes: Routes) => void)
+    | null;
 };
 
 export const $router = createStore<Store>({

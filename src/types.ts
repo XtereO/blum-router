@@ -26,8 +26,12 @@ export type RouteMiddleware = (
 ) => boolean | Promise<boolean>;
 
 export type BackHandlerOptions = {
-  beforeBackHandledCallback?: (() => void) | null;
-  afterBackHandledCallback?: (() => void) | null;
+  beforeBackHandledCallback?:
+    | ((storeRoutes: Routes, prevRoutes: Routes) => void)
+    | null;
+  afterBackHandledCallback?:
+    | ((storeRoutes: Routes, prevRoutes: Routes) => void)
+    | null;
   isDispatchChangeStateEventBeforeMiddleware?: boolean;
   isDispatchChangeStateEventAfterMiddleware?: boolean;
   isBackFromBrowser?: boolean;

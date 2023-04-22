@@ -2,8 +2,6 @@
     <img width="134" src="https://webstockreview.net/images/comet-clipart-meteorite-4.png">
 </div>
 
-# Not tested! Will arround March 15.
-
 # Description
 
 This library based on [effector](https://www.npmjs.com/package/effector) and window.history.state without changing url and hash. Created for routing vk-mini-apps, also may useful in PWA. I recomend use it with @blumjs/cli.
@@ -49,11 +47,14 @@ const App = () => {
     },
     //first arg is the name of route; second callback, that fired when pushed back in browser
     createCatchBackBrowserRouteMiddleware('Alert', (storeRoutes, prevRoutes) => back());
+
     //the same as createCatchBackBrowserRouteMiddleware, but make auto historyPush storeRoutes
     createDisableBackBrowserRouteMiddleware('Loading', (storeRoutes, prevRoutes) => console.log('loading, please wait...')),
+
     //custom middleware
     createRouteMiddleware((storeRoutes, prevRoutes) => {
       if(navigator.onLine){
+
         //middleware passed
         return true;
       }
@@ -106,10 +107,10 @@ back({
 
 //back is async function and you can't await it. So use options beforeBackHandledCallback (triggered after window.history.back and before middlewares) and afterBackHandledCallback (triggered when passed all midlewares)
 back({
-  beforeBackHandledCallback: () => {
+  beforeBackHandledCallback: (storeRoutes, prevRoutes) => {
     console.log("I triggered before middlewares")
   },
-  afterBackHandledCallback: () => {
+  afterBackHandledCallback: (storeRoutes, prevRoutes) => {
     console.log("I triggered after middlewares")
   }
 });

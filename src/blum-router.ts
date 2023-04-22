@@ -9,7 +9,6 @@ export const blumRouter = {
       modal: undefined,
       popout: undefined,
     };
-    console.log("try to push history", this);
     this.changeState({
       view: routes.hasOwnProperty("view") ? routes.view : view,
       panel: routes.hasOwnProperty("panel") ? routes.panel : panel,

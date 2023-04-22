@@ -1,7 +1,7 @@
 {
   "name": "@blumjs/router",
-  "version": "7.9.1",
-  "description": "",
+  "version": "7.9.2",
+  "description": "Router for vk-mini-apps",
   "exports": {
     ".": "./dist/index.js"
   },
@@ -18,7 +18,9 @@
   },
   "keywords": [
     "vk-mini-app",
+    "vk-mini-apps",
     "route",
+    "router",
     "blum",
     "blumjs",
     "hook"

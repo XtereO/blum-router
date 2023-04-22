@@ -4,7 +4,7 @@
 
 # Description
 
-This library based on [effector](https://www.npmjs.com/package/effector) and window.history.state without changing url and hash. Created for routing vk-mini-apps, also may useful in PWA. I recomend use it with @blumjs/cli.
+This library based on [effector](https://www.npmjs.com/package/effector) and window.history.state without changing url and hash. Created for routing vk-mini-apps, also may useful in PWA. I recomend use it with [@blumjs/cli](https://www.npmjs.com/package/@blumjs/cli).
 
 ## Usage
 

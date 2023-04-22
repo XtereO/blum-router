@@ -9,9 +9,9 @@ export declare const useRouter: () => {
     isBackHandled: boolean;
     isDispatchChangeStateEventBeforeMiddleware: boolean;
     isDispatchChangeStateEventAfterMiddleware: boolean;
-    beforeBackHandledCallback: (() => void) | null;
+    beforeBackHandledCallback: ((storeRoutes: Routes, prevRoutes: Routes) => void) | null;
     isBackFromBrowser: boolean;
-    afterBackHandledCallback: (() => void) | null;
+    afterBackHandledCallback: ((storeRoutes: Routes, prevRoutes: Routes) => void) | null;
 };
 export declare const createRouteMiddleware: (callback: RouteMiddleware) => RouteMiddleware;
 export declare const createDisableBackBrowserRouteMiddleware: (route: string, callback?: ((storeRoutes: Routes, prevRoutes: Routes, options: BackHandlerOptions) => (void | boolean) | Promise<void | boolean>) | undefined) => (storeRoutes: Routes, prevRoutes: Routes, options: BackHandlerOptions) => Promise<boolean>;

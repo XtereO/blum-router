@@ -1,3 +1,4 @@
+import { Routes } from "src/types";
 type Store = {
     activeView: string | null;
     activePanel: string | null;
@@ -7,9 +8,9 @@ type Store = {
     isBackHandled: boolean;
     isDispatchChangeStateEventBeforeMiddleware: boolean;
     isDispatchChangeStateEventAfterMiddleware: boolean;
-    beforeBackHandledCallback: (() => void) | null;
+    beforeBackHandledCallback: ((storeRoutes: Routes, prevRoutes: Routes) => void) | null;
     isBackFromBrowser: boolean;
-    afterBackHandledCallback: (() => void) | null;
+    afterBackHandledCallback: ((storeRoutes: Routes, prevRoutes: Routes) => void) | null;
 };
 export declare const $router: import("effector").Store<Store>;
 export {};

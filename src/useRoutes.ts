@@ -1,10 +1,12 @@
 import { useStore } from "effector-react";
+import { useEffect } from "react";
 import { blumRouter } from "./blum-router";
 import {
   $router,
   _setActiveModal,
   _setActivePopout,
   _setActiveViewPanel,
+  _setRouteOptions,
   initRoute,
   setDefaultBackHandlerOptions,
 } from "./router";
@@ -26,6 +28,7 @@ export const useInitRouter = (
     activeModal,
     activePopout,
     isRouteInit,
+    routeOptions,
     isDispatchChangeStateEventBeforeMiddleware,
     isDispatchChangeStateEventAfterMiddleware,
     isBackHandled,
@@ -109,6 +112,7 @@ export const useInitRouter = (
         }
         _setActiveModal(modal);
         _setActivePopout(popout);
+        _setRouteOptions(payload?.options ?? null);
         if (!isRouteInit) {
           initRoute();
         }
@@ -117,6 +121,14 @@ export const useInitRouter = (
     2,
     [isRouteInit]
   );
+
+  useEffect(() => {
+    if (routeOptions) {
+      if (routeOptions?.afterSetHandledCallback) {
+        routeOptions.afterSetHandledCallback();
+      }
+    }
+  }, [routeOptions]);
 };
 
 export const useRouter = () => useStore($router);

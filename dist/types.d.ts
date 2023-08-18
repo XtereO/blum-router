@@ -25,3 +25,6 @@ export type BackHandlerOptions = {
     isBackFromBrowser?: boolean;
     isBackHandled?: boolean;
 };
+export type SetRouteOptions = {
+    afterSetHandledCallback?: (() => void) | null;
+};

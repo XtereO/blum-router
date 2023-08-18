@@ -1,15 +1,17 @@
-import { Routes } from "./types";
+import { Routes, SetRouteOptions } from "./types";
 export declare const blumRouter: {
     subscribers: Subscriber[];
-    historyPush(routes: Partial<Routes>): void;
-    changeState(routes: BlumRouterEventMap["changestate"]): void;
-    dispatchChangeStateEvent(): void;
+    historyPush(routes: Partial<Routes>, options?: SetRouteOptions): void;
+    changeState(config: BlumRouterEventMap["changestate"]): void;
+    dispatchChangeStateEvent(options?: SetRouteOptions): void;
     addEventListener<K extends keyof BlumRouterEventMap>(type: K, callback: (payload: BlumRouterEventMap[K]) => void, index: number): void;
     removeEventListener(index: number): void;
     _trigerEvent<K_1 extends keyof BlumRouterEventMap>(type: K_1, payload: BlumRouterEventMap[K_1]): void;
 };
 export type BlumRouterEventMap = {
-    changestate: Routes | null;
+    changestate: (Routes & {
+        options?: SetRouteOptions;
+    }) | null;
     init: boolean;
 };
 export type Subscriber = {

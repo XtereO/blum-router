@@ -1,10 +1,11 @@
-import { Routes } from "src/types";
+import { Routes, SetRouteOptions } from "src/types";
 type Store = {
     activeView: string | null;
     activePanel: string | null;
     activeModal: string | null;
     activePopout: string | null;
     isRouteInit: boolean;
+    routeOptions: SetRouteOptions | null;
     isBackHandled: boolean;
     isDispatchChangeStateEventBeforeMiddleware: boolean;
     isDispatchChangeStateEventAfterMiddleware: boolean;

@@ -1,5 +1,5 @@
 import { blumRouter } from "src/blum-router";
-import { BackHandlerOptions } from "src/types";
+import { BackHandlerOptions, SetRouteOptions } from "src/types";
 import { setBackHandlerOptions } from "./event";
 
 export const back = (options?: BackHandlerOptions) => {
@@ -14,15 +14,18 @@ export const back = (options?: BackHandlerOptions) => {
   }
   window.history.back();
 };
-export const setActiveViewPanel = (routes: { view: string; panel: string }) => {
-  blumRouter.historyPush({ view: routes.view, panel: routes.panel });
+export const setActiveViewPanel = (
+  routes: { view: string; panel: string },
+  options?: SetRouteOptions
+) => {
+  blumRouter.historyPush({ view: routes.view, panel: routes.panel }, options);
 };
-export const setActivePanel = (panel: string) => {
-  blumRouter.historyPush({ panel });
+export const setActivePanel = (panel: string, options?: SetRouteOptions) => {
+  blumRouter.historyPush({ panel }, options);
 };
-export const setActiveModal = (modal: string) => {
-  blumRouter.historyPush({ modal });
+export const setActiveModal = (modal: string, options?: SetRouteOptions) => {
+  blumRouter.historyPush({ modal }, options);
 };
-export const setActivePopout = (popout: string) => {
-  blumRouter.historyPush({ popout });
+export const setActivePopout = (popout: string, options?: SetRouteOptions) => {
+  blumRouter.historyPush({ popout }, options);
 };

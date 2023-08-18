@@ -1,8 +1,8 @@
-import { Routes } from "./types";
+import { Routes, SetRouteOptions } from "./types";
 
 export const blumRouter = {
   subscribers: [] as Subscriber[],
-  historyPush(routes: Partial<Routes>) {
+  historyPush(routes: Partial<Routes>, options?: SetRouteOptions) {
     const { view, panel, modal, popout } = window.history.state ?? {
       view: undefined,
       panel: undefined,
@@ -14,18 +14,27 @@ export const blumRouter = {
       panel: routes.hasOwnProperty("panel") ? routes.panel : panel,
       modal: routes.hasOwnProperty("modal") ? routes.modal : modal,
       popout: routes.hasOwnProperty("popout") ? routes.popout : popout,
+      options,
     });
   },
-  changeState(routes: BlumRouterEventMap["changestate"]) {
+  changeState(config: BlumRouterEventMap["changestate"]) {
     try {
-      window.history.pushState(routes, "");
-      this.dispatchChangeStateEvent();
+      window.history.pushState(
+        {
+          view: config?.view,
+          panel: config?.panel,
+          modal: config?.modal,
+          popout: config?.popout,
+        },
+        ""
+      );
+      this.dispatchChangeStateEvent(config?.options);
     } catch (e) {
       console.log("changeState err", e);
     }
   },
-  dispatchChangeStateEvent() {
-    this._trigerEvent("changestate", window.history.state);
+  dispatchChangeStateEvent(options?: SetRouteOptions) {
+    this._trigerEvent("changestate", { ...window.history.state, options });
   },
   addEventListener<K extends keyof BlumRouterEventMap>(
     type: K,
@@ -50,7 +59,7 @@ export const blumRouter = {
 };
 
 export type BlumRouterEventMap = {
-  changestate: Routes | null;
+  changestate: (Routes & { options?: SetRouteOptions }) | null;
   init: boolean;
 };
 

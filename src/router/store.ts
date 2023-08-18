@@ -1,11 +1,12 @@
 import { createStore } from "effector";
-import { Routes } from "src/types";
+import { Routes, SetRouteOptions } from "src/types";
 import {
   _setActiveModal,
   _setActivePanel,
   _setActivePopout,
   _setActiveView,
   _setActiveViewPanel,
+  _setRouteOptions,
   initRoute,
   setBackHandled,
   setBackHandlerOptions,
@@ -18,6 +19,7 @@ type Store = {
   activeModal: string | null;
   activePopout: string | null;
   isRouteInit: boolean;
+  routeOptions: SetRouteOptions | null;
   isBackHandled: boolean;
   isDispatchChangeStateEventBeforeMiddleware: boolean;
   isDispatchChangeStateEventAfterMiddleware: boolean;
@@ -35,6 +37,7 @@ export const $router = createStore<Store>({
   activePanel: null,
   activeModal: null,
   activePopout: null,
+  routeOptions: null,
   isRouteInit: false,
   isBackHandled: true,
   isDispatchChangeStateEventBeforeMiddleware: false,
@@ -91,9 +94,13 @@ export const $router = createStore<Store>({
     ...state,
     activeModal,
   }))
-  .on(_setActivePopout, (state, activePopout) => ({
+  .on(_setActivePopout, (state, popout) => ({
     ...state,
-    activePopout,
+    activePopout: popout,
+  }))
+  .on(_setRouteOptions, (state, options) => ({
+    ...state,
+    routeOptions: options,
   }))
   .on(initRoute, (state) => ({
     ...state,

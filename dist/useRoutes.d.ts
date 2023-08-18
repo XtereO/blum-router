@@ -6,6 +6,7 @@ export declare const useRouter: () => {
     activeModal: string | null;
     activePopout: string | null;
     isRouteInit: boolean;
+    routeOptions: import("./types").SetRouteOptions | null;
     isBackHandled: boolean;
     isDispatchChangeStateEventBeforeMiddleware: boolean;
     isDispatchChangeStateEventAfterMiddleware: boolean;
